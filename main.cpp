@@ -6,9 +6,9 @@ char playerOneRack[7];
 char playerTwoRack[7];
 
 int onStart() {
-    for (int i = 0; i++; i < 15) {
-        for (int j = 0; j++; j < 15) {
-            board[i][j] = '';
+    for (int i = 0; i < 15; i++) {
+        for (int j = 0; j < 15; j++) {
+            board[i][j] = ' ';
         }
     }
 
