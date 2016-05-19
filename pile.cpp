@@ -2,15 +2,7 @@
 // Created by Davey Smith on 5/17/16.
 //
 
-using namespace std;
-#include <map>
-
-class pile {
-    map<char, int> pileMap;
-public:
-    pile(); // constructor
-    char draw(); // draw method
-};
+#include "pile.h"
 
 pile::pile() {
     pileMap.insert(pair<char, int>('A', 9));
@@ -39,9 +31,23 @@ pile::pile() {
     pileMap.insert(pair<char, int>('X', 1));
     pileMap.insert(pair<char, int>('Y', 2));
     pileMap.insert(pair<char, int>('Z', 1));
+    pileMap.insert(pair<char, int>('*', 2));
 
 }
 
 char pile::draw() {
-
+    char ch = rand() % 27;
+    int freq;
+    if (ch == 26) { // we are dealing with a wildcard
+        ch = '*';
+    } else {
+        ch += 'A';
+    }
+    freq = pileMap.at(ch);
+    if (freq == 0) {
+        return draw();
+    } else {
+        //pileMap[ch]--; // need to work on this
+        return ch;
+    }
 }

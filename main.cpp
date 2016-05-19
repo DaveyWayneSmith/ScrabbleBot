@@ -1,4 +1,5 @@
 #include <iostream>
+#include "pile.h"
 
 using namespace std;
 char board[15][15];
@@ -18,8 +19,10 @@ int onStart() {
 
 int main() {
     onStart();
-
-
-
+    pile* testPile = new pile();
+    for (int i = 0; i < 102; i++) {
+        char ch = testPile->draw();
+        cout << ch;
+    }
 }
 
