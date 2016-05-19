@@ -2,52 +2,57 @@
 // Created by Davey Smith on 5/17/16.
 //
 
+#include <vector>
+#include <time.h>
 #include "pile.h"
 
 pile::pile() {
-    pileMap.insert(pair<char, int>('A', 9));
-    pileMap.insert(pair<char, int>('B', 2));
-    pileMap.insert(pair<char, int>('C', 2));
-    pileMap.insert(pair<char, int>('D', 4));
-    pileMap.insert(pair<char, int>('E', 12));
-    pileMap.insert(pair<char, int>('F', 2));
-    pileMap.insert(pair<char, int>('G', 3));
-    pileMap.insert(pair<char, int>('H', 2));
-    pileMap.insert(pair<char, int>('I', 9));
-    pileMap.insert(pair<char, int>('J', 1));
-    pileMap.insert(pair<char, int>('K', 1));
-    pileMap.insert(pair<char, int>('L', 4));
-    pileMap.insert(pair<char, int>('M', 2));
-    pileMap.insert(pair<char, int>('N', 6));
-    pileMap.insert(pair<char, int>('O', 8));
-    pileMap.insert(pair<char, int>('P', 2));
-    pileMap.insert(pair<char, int>('Q', 1));
-    pileMap.insert(pair<char, int>('R', 6));
-    pileMap.insert(pair<char, int>('S', 4));
-    pileMap.insert(pair<char, int>('T', 6));
-    pileMap.insert(pair<char, int>('U', 4));
-    pileMap.insert(pair<char, int>('V', 2));
-    pileMap.insert(pair<char, int>('W', 2));
-    pileMap.insert(pair<char, int>('X', 1));
-    pileMap.insert(pair<char, int>('Y', 2));
-    pileMap.insert(pair<char, int>('Z', 1));
-    pileMap.insert(pair<char, int>('*', 2));
+    pileMap['A'] = 9;
+    pileMap['B'] = 2;
+    pileMap['C'] = 2;
+    pileMap['D'] = 4;
+    pileMap['E'] = 12;
+    pileMap['F'] = 2;
+    pileMap['G'] = 3;
+    pileMap['H'] = 2;
+    pileMap['I'] = 9;
+    pileMap['J'] = 1;
+    pileMap['K'] = 1;
+    pileMap['L'] = 4;
+    pileMap['M'] = 2;
+    pileMap['N'] = 6;
+    pileMap['O'] = 8;
+    pileMap['P'] = 2;
+    pileMap['Q'] = 1;
+    pileMap['R'] = 6;
+    pileMap['S'] = 4;
+    pileMap['T'] = 6;
+    pileMap['U'] = 4;
+    pileMap['V'] = 2;
+    pileMap['W'] = 2;
+    pileMap['X'] = 1;
+    pileMap['Y'] = 2;
+    pileMap['Z'] = 1;
+    pileMap['*'] = 2;
 
+    srand(time(NULL));
 }
 
 char pile::draw() {
-    char ch = rand() % 27;
-    int freq;
-    if (ch == 26) { // we are dealing with a wildcard
-        ch = '*';
-    } else {
-        ch += 'A';
+    if (pileMap.empty()) {
+        return NULL;
     }
-    freq = pileMap.at(ch);
-    if (freq == 0) {
-        return draw();
-    } else {
-        //pileMap[ch]--; // TODO: need to work on this
-        return ch;
+    vector<char> keyset;
+    for (auto it : pileMap) {
+        keyset.push_back(it.first);
     }
+    int idx = rand() % keyset.size();
+    char ch = keyset[idx];
+    int freq = pileMap.at(ch);
+    if (freq <= 1) {
+        pileMap.erase(ch);
+    } else {
+        pileMap[ch]--;
+    }
+    return ch;
 }
