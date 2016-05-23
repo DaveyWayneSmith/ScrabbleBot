@@ -1,0 +1,18 @@
+//
+// Created by Edward on 5/22/2016.
+//
+
+#ifndef SCRABBLEBOT_DEFINITIONS_H
+#define SCRABBLEBOT_DEFINITIONS_H
+
+static const int VERT = 1;
+static const int HORZ = 0;
+
+static const int DL = 0;
+static const int TL = 1;
+static const int DW = 2;
+static const int TW = 3;
+
+static const int BOARD_SIZE = 225;
+static const int BOARD_SIDE_LEN = 15;
+#endif //SCRABBLEBOT_DEFINITIONS_H

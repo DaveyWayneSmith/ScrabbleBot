@@ -12,6 +12,7 @@ class game {
     board gameBoard;
     short currPlayer;
 public:
+    void start(); // start the game
     bool play(); // wait for player to play
     void display(); // display the current state of the game
 };
