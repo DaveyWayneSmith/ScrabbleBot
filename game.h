@@ -21,9 +21,10 @@ class game {
     short numPlayers;
     vector<player> players;
     pile tilePile;
+    bool validate(placement move); // checks if a placement is valid
 public:
     void start(); // start the game
-    bool play(); // wait for player to play
+    int play(placement move); // accept a placement from a player. returns the score if successful, -1 otherwise
     void display(); // display the current state of the game
     game(); // default constructor
     game(short num); // constructor that specifies number of players

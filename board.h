@@ -18,12 +18,11 @@ class board {
     char boardArr[BOARD_SIZE];
     map<int, int> multMap;
     map<char, int> valMap;
-    bool validatePlace(short loc, short dir, string word);
 public:
     board(); // constructor
     void display(); //display the board
-    int place(short loc, short dir, string word); // place word on the board
-    int calcScore(short loc, short dir, string word); // calculates the score of a move
+    int place(placement move); // place word on the board
+    int calcScore(placement move); // calculates the score of a placement
 };
 
 

@@ -18,4 +18,11 @@ static const int BOARD_SIDE_LEN = 15;
 static const int TRAY_SIZE = 7;
 
 static const int SCORE_CAP = 50;
+
+typedef struct placement {
+    short loc;
+    short dir;
+    string word;
+} placement;
+
 #endif //SCRABBLEBOT_DEFINITIONS_H

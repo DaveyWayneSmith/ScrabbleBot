@@ -121,7 +121,10 @@ void board::display() {
 /*
  * NO OUT-OF-BOUNDS ERROR CHECKING
  */
-int board::place(short loc, short dir, string word) {
+int board::place(placement move) {
+    short dir = move.dir;
+    short loc = move.loc;
+    string word = move.word;
     if (dir == HORZ) { // if horizontal
         for (int i = 0; i < word.length(); i++) {
             boardArr[loc + i] = word[i];
@@ -131,13 +134,14 @@ int board::place(short loc, short dir, string word) {
             boardArr[loc + i * BOARD_SIDE_LEN] = word[i];
         }
     }
-    return calcScore(loc, dir, word); //
+    return calcScore(move); //
 }
 
-int board::calcScore(short loc, short dir, string word) {
-    if (!validatePlace(loc, dir, word)) {
-        return -1;
-    }
+int board::calcScore(placement move) {
+    short loc = move.loc;
+    short dir = move.dir;
+    string word = move.word;
+
     short multiplier = 1;
     int score = 0;
     char currChar;
@@ -167,8 +171,4 @@ int board::calcScore(short loc, short dir, string word) {
     }
     score *= multiplier;
     return score;
-}
-
-bool board::validatePlace(short loc, short dir, string word) {
-    return true;
 }

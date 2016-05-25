@@ -7,13 +7,13 @@
 
 void game::start() {
     int maxscore = 0;
+    display();
     while (maxscore < SCORE_CAP) {
         for (auto p:players) {
             if (p.score > maxscore) {
                 maxscore = p.score;
             }
         }
-        display();
         short loc;
         cout << "Enter a starting location:\n";
         cin >> loc;
@@ -25,15 +25,18 @@ void game::start() {
         string word;
         cout << "Enter your word:\n";
         cin >> word;
-        int score = gameBoard.place(loc, dir, word);
+        int score = play(placement{loc, dir, word});
         players[currPlayer].score += score;
         currPlayer = ++currPlayer % numPlayers;
         display();
     }
 }
 
-bool game::play() {
-    return false;
+int game::play(placement move) {
+    if (validate(move)) {
+        return gameBoard.place(move);
+    }
+    return -1;
 }
 
 void game::display() {
@@ -66,5 +69,9 @@ void game::init(short num) {
         players.push_back(player{0, tray});
     }
     currPlayer = 0;
+}
+
+bool game::validate(placement move) {
+    return true;
 }
 
