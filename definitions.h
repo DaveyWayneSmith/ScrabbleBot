@@ -15,4 +15,7 @@ static const int TW = 3;
 
 static const int BOARD_SIZE = 225;
 static const int BOARD_SIDE_LEN = 15;
+static const int TRAY_SIZE = 7;
+
+static const int SCORE_CAP = 50;
 #endif //SCRABBLEBOT_DEFINITIONS_H

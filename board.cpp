@@ -131,7 +131,7 @@ int board::place(short loc, short dir, string word) {
             boardArr[loc + i * BOARD_SIDE_LEN] = word[i];
         }
     }
-    return 0; //
+    return calcScore(loc, dir, word); //
 }
 
 int board::calcScore(short loc, short dir, string word) {
@@ -151,7 +151,7 @@ int board::calcScore(short loc, short dir, string word) {
         currChar = word[j];
         if (currChar == '_') {
             score += valMap[boardArr[currLoc]];
-        }else if (multMap.find(currLoc) != multMap.end() && multMap[currLoc] == DL) { // extra check because end iterator evaluates to 0 (for some reason)
+        } else if (multMap.find(currLoc) != multMap.end() && multMap[currLoc] == DL) { // extra check because end iterator evaluates to 0 (for some reason)
             score += 2 * valMap[currChar];
         } else if (multMap[currLoc] == TL) {
             score += 3 * valMap[currChar];
