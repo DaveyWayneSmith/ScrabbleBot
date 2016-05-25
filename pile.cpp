@@ -43,9 +43,12 @@ char pile::draw() {
     if (pileMap.empty()) {
         return NULL;
     }
+    // generate weighted keyset
     vector<char> keyset;
     for (auto it : pileMap) {
-        keyset.push_back(it.first);
+        for (int i = 0; i < it.second; i++) {
+            keyset.push_back(it.first);
+        }
     }
     int idx = rand() % keyset.size();
     char ch = keyset[idx];
