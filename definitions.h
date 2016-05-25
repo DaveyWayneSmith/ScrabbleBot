@@ -19,6 +19,8 @@ static const int TRAY_SIZE = 7;
 
 static const int SCORE_CAP = 50;
 
+static const string DICT_FILE = "dictionary.txt";
+
 typedef struct placement {
     short loc;
     short dir;

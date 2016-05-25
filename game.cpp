@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include "game.h"
 
 void game::start() {
@@ -72,6 +73,38 @@ void game::init(short num) {
 }
 
 bool game::validate(placement move) {
+    if (move.loc < 0 || move.loc > 255) {
+        return false;
+    }
+    if (move.dir < 0 || move.dir > 1) {
+        return false;
+    }
+    if (move.word.length() > 15) {
+        return false;
+    }
+    // at this point we are guaranteed a 0 <= loc <= 255 and word.length() <= 15
+    if (move.dir == HORZ) {
+        if (move.loc + move.word.length() > (move.loc + move.word.length()) / BOARD_SIDE_LEN * BOARD_SIDE_LEN) { // if the word goes off the board
+            return false;
+        }
+    } else {
+        // perform the vertical version of the out of bounds check
+    }
+    // at this point we are guaranteed that the word can physically fit on the board
+
+    // now check if word is in dictionary
+    FILE* fh = fopen(DICT_FILE, "r");
+    while (!feof(fh)) {
+        string line = fgets(fh);
+        if (strcmp(line, move.word)) {
+            break;
+        }
+    }
+    if (!feof(fh)) { // if we got to the end of the file without finding the word
+        return false;
+    }
+    fclose(fh);
+    // still need to perform cross checks
     return true;
 }
 
