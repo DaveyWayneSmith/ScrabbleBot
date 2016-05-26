@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <fstream>
 #include "game.h"
 
 void game::start() {
@@ -84,26 +85,29 @@ bool game::validate(placement move) {
     }
     // at this point we are guaranteed a 0 <= loc <= 255 and word.length() <= 15
     if (move.dir == HORZ) {
-        if (move.loc + move.word.length() > (move.loc + move.word.length()) / BOARD_SIDE_LEN * BOARD_SIDE_LEN) { // if the word goes off the board
-            return false;
-        }
+        int obds_val = (move.loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
+        if (move.loc + move.word.length() > obds_val) return false;
     } else {
-        // perform the vertical version of the out of bounds check
+        int r = move.loc / BOARD_SIDE_LEN;
+        int c = move.loc % BOARD_SIDE_LEN;
+        int trans_idx = c * BOARD_SIDE_LEN + r;
+        int obds_val = (trans_idx / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
+        if (trans_idx + move.word.length() > obds_val) return false;
     }
     // at this point we are guaranteed that the word can physically fit on the board
 
     // now check if word is in dictionary
-    FILE* fh = fopen(DICT_FILE, "r");
-    while (!feof(fh)) {
-        string line = fgets(fh);
-        if (strcmp(line, move.word)) {
+    ifstream file("dictionary.txt");
+    string line;
+    bool found = false;
+    while (std::getline(file, line)) {
+        if (strcmp(line.c_str(), move.word.c_str())) {
+            found = true;
             break;
         }
     }
-    if (!feof(fh)) { // if we got to the end of the file without finding the word
-        return false;
-    }
-    fclose(fh);
+    if (!found) return false;
+
     // still need to perform cross checks
     return true;
 }
