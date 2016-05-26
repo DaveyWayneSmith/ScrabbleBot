@@ -97,10 +97,10 @@ bool game::validate(placement move) {
     // at this point we are guaranteed that the word can physically fit on the board
 
     // now check if word is in dictionary
-    ifstream file("dictionary.txt");
+    ifstream file ("dictionary.txt");
     string line;
     bool found = false;
-    while (std::getline(file, line)) {
+    while (getline(file, line)) {
         if (strcmp(line.c_str(), move.word.c_str())) {
             found = true;
             break;
