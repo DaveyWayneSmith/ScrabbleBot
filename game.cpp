@@ -48,6 +48,7 @@ void game::start() {
                 }
             }
         }
+
         int score = play(placement{loc, dir, word});
         players[currPlayer].score += score;
         currPlayer = ++currPlayer % numPlayers;
@@ -57,8 +58,16 @@ void game::start() {
 
 int game::play(placement move) {
     int score = 0;
-    if (validate(move)) {
+    int cross_loc[move.word.length()] = {0};
+    if (validate(move, cross_loc)) {
         score = gameBoard.place(move);
+        // check for intersections
+        // if intersection found, replace with '_'
+        for (int i = 0; i < move.word.length(); i++) {
+            if (cross_loc[i]) {
+                move.word[i] = '_';
+            }
+        }
         // replace used characters
         for (int i = 0; i < move.word.length(); i++) {
             if (strchr(players[currPlayer].tray.c_str(), move.word[i])) {
@@ -108,7 +117,7 @@ void game::init(short num) {
     currPlayer = 0;
 }
 
-bool game::validate(placement move) {
+bool game::validate(placement move, int* cross_loc) {
     if (move.loc < 0 || move.loc > 255) {
         return false;
     }
@@ -138,6 +147,9 @@ bool game::validate(placement move) {
         if (!strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
                     move.word[i] != gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
             return false;
+        } else if (strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
+                    move.word[i] == gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
+            cross_loc[i] = 1;
         }
     }
     // now check if word is in dictionary

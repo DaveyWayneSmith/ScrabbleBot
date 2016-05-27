@@ -147,9 +147,9 @@ int board::calcScore(placement move) {
             currLoc = loc + j * BOARD_SIDE_LEN;
         }
         currChar = word[j];
-        if (currChar == '_') {
-            score += valMap[boardArr[currLoc]];
-        } else if (multMap.find(currLoc) != multMap.end() && multMap[currLoc] == DL) { // extra check because end iterator evaluates to 0 (for some reason)
+        // TODO: BULLSHIT MAP IS ADDING RANDOM SHIT TO ITSELF WITHOUT PERMISSION
+        // SEEMS TO BE ELEMENTS GET ADDED WHEN POLLING TO SEE IF THEY EXIST
+        if (multMap.find(currLoc) != multMap.end() && multMap[currLoc] == DL) { // extra check because end iterator evaluates to 0 (for some reason)
             score += 2 * valMap[currChar];
         } else if (multMap[currLoc] == TL) {
             score += 3 * valMap[currChar];
