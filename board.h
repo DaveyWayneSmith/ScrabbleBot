@@ -23,6 +23,7 @@ public:
     void display(); //display the board
     int place(placement move); // place word on the board
     int calcScore(placement move); // calculates the score of a placement
+    char get(short loc); // get a character off of the board
 };
 
 

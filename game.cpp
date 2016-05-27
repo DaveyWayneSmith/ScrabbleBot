@@ -5,11 +5,13 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <unistd.h>
 #include "game.h"
 
 void game::start() {
     int maxscore = 0;
     display();
+    bool first = true;
     while (maxscore < SCORE_CAP) {
         for (auto p:players) {
             if (p.score > maxscore) {
@@ -27,6 +29,25 @@ void game::start() {
         string word;
         cout << "Enter your word:\n";
         cin >> word;
+
+        // perform first time check to see if word crosses the center
+        if (first) {
+            first = false;
+            if (dir == HORZ && (loc > CENTER || loc + word.length() < CENTER)) {
+                loc = -1;
+                first = true;
+            }
+            else if (dir == VERT) {
+                // transposing the starting index
+                int r = loc / BOARD_SIDE_LEN;
+                int c = loc % BOARD_SIDE_LEN;
+                int trans_idx = c * BOARD_SIDE_LEN + r;
+                if (trans_idx > CENTER || trans_idx + word.length() < CENTER) {
+                    loc = -1;
+                    first = true;
+                }
+            }
+        }
         int score = play(placement{loc, dir, word});
         players[currPlayer].score += score;
         currPlayer = ++currPlayer % numPlayers;
@@ -35,10 +56,24 @@ void game::start() {
 }
 
 int game::play(placement move) {
+    int score = 0;
     if (validate(move)) {
-        return gameBoard.place(move);
+        score = gameBoard.place(move);
+        // replace used characters
+        for (int i = 0; i < move.word.length(); i++) {
+            if (strchr(players[currPlayer].tray.c_str(), move.word[i])) {
+                char ch = tilePile.draw();
+                for (int j = 0; j < players[currPlayer].tray.length(); j++) {
+                    if (move.word[i] == players[currPlayer].tray[j]) {
+                        players[currPlayer].tray[j] = ch;
+                        break;
+                    }
+                }
+
+            }
+        }
     }
-    return -1;
+    return score;
 }
 
 void game::display() {
@@ -96,15 +131,25 @@ bool game::validate(placement move) {
     }
     // at this point we are guaranteed that the word can physically fit on the board
 
+    // now check if the letters are in the tray
+    for (int i = 0; i < move.word.length(); i++) {
+        //first check if tray contains the current letter
+        // if not, then check if the board at that locations contains the letter
+        if (!strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
+                    move.word[i] != gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
+            return false;
+        }
+    }
     // now check if word is in dictionary
-    ifstream file ("dictionary.txt");
+    ifstream file;
+    file.open(ED_DICT_FILE);
+    if (!file) {
+        file.open(DAVEY_DICT_FILE);
+    }
     string line;
     bool found = false;
-    while (getline(file, line)) {
-        if (strcmp(line.c_str(), move.word.c_str())) {
-            found = true;
-            break;
-        }
+    while (getline(file, line) && !found) {
+        found = (bool) strcmp(line.c_str(), move.word.c_str());
     }
     if (!found) return false;
 

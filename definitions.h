@@ -15,11 +15,13 @@ static const int TW = 3;
 
 static const int BOARD_SIZE = 225;
 static const int BOARD_SIDE_LEN = 15;
+static const int CENTER = 112;
 static const int TRAY_SIZE = 7;
 
 static const int SCORE_CAP = 50;
 
-static const string DICT_FILE = "dictionary.txt";
+static const string ED_DICT_FILE = "C:\\Users\\Edward\\Documents\\ScrabbleBot\\dictionary.txt";
+static const string DAVEY_DICT_FILE = "dictionary.txt";
 
 typedef struct placement {
     short loc;

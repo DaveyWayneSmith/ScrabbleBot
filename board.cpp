@@ -125,14 +125,8 @@ int board::place(placement move) {
     short dir = move.dir;
     short loc = move.loc;
     string word = move.word;
-    if (dir == HORZ) { // if horizontal
-        for (int i = 0; i < word.length(); i++) {
-            boardArr[loc + i] = word[i];
-        }
-    } else { // vertical placement
-        for (int i = 0; i < word.length(); i++) {
-            boardArr[loc + i * BOARD_SIDE_LEN] = word[i];
-        }
+    for (int i = 0; i < word.length(); i++) {
+        boardArr[loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN)] = word[i];
     }
     return calcScore(move); //
 }
@@ -171,4 +165,8 @@ int board::calcScore(placement move) {
     }
     score *= multiplier;
     return score;
+}
+
+char board::get(short loc) {
+    return boardArr[loc];
 }
