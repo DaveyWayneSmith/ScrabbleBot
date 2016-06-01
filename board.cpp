@@ -108,9 +108,27 @@ void board::display() {
         } else {
             cout << '|';
             for (int j = 0; j < 15; j++) {
-                cout << ' ';
-                cout << boardArr[j + (i / 2) * BOARD_SIDE_LEN];
-                cout << " |";
+                int currLoc = j + (i / 2) * BOARD_SIDE_LEN;
+                char lett = boardArr[currLoc];
+                if (lett == ' ' && multMap.find(currLoc) != multMap.end()) { // if the space is empty, need to check if it is a special tile
+                    int mapVal = multMap.at(currLoc);
+                    if (mapVal == DL) { // extra check because end iterator evaluates to 0 (for some reason)
+                        cout << "\033[36md l\033[0m";
+                    } else if (mapVal == TL) {
+                        cout << "\033[34mt l\033[0m";
+                    } else if (mapVal == DW) {
+                        cout << "\033[35md w\033[0m";
+                    } else if (mapVal == TW) {
+                        cout << "\033[31mt w\033[0m";
+                    }
+                    cout << '|';
+                } else if (lett == ' ' && currLoc == CENTER) {
+                    cout << " * |";
+                } else {
+                    cout << ' ';
+                    cout << boardArr[j + (i / 2) * BOARD_SIDE_LEN];
+                    cout << " |";
+                }
             }
         }
         cout << '\n';
@@ -147,20 +165,21 @@ int board::calcScore(placement move) {
             currLoc = loc + j * BOARD_SIDE_LEN;
         }
         currChar = word[j];
-        // TODO: BULLSHIT MAP IS ADDING RANDOM SHIT TO ITSELF WITHOUT PERMISSION
-        // SEEMS TO BE ELEMENTS GET ADDED WHEN POLLING TO SEE IF THEY EXIST
-        if (multMap.find(currLoc) != multMap.end() && multMap[currLoc] == DL) { // extra check because end iterator evaluates to 0 (for some reason)
-            score += 2 * valMap[currChar];
-        } else if (multMap[currLoc] == TL) {
-            score += 3 * valMap[currChar];
-        } else if (multMap[currLoc] == DW) {
-            multiplier *= 2;
-            score += valMap[currChar];
-        } else if (multMap[currLoc] == TW) {
-            multiplier *= 3;
-            score += valMap[currChar];
+        if (multMap.find(currLoc) != multMap.end()) {
+            int mapVal = multMap.at(currLoc);
+            if (mapVal == DL) { // extra check because end iterator evaluates to 0 (for some reason)
+                score += 2 * valMap.at(currChar);
+            } else if (mapVal == TL) {
+                score += 3 * valMap.at(currChar);
+            } else if (mapVal == DW) {
+                multiplier *= 2;
+                score += valMap.at(currChar);
+            } else {
+                multiplier *= 3;
+                score += valMap.at(currChar);
+            }
         } else {
-            score += valMap[currChar];
+            score += valMap.at(currChar);
         }
     }
     score *= multiplier;

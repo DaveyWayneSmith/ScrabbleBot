@@ -22,6 +22,8 @@ class game {
     vector<player> players;
     pile tilePile;
     bool validate(placement move, int* cross_loc); // checks if a placement is valid
+    bool crossCheck(placement move);
+    bool dictCheck(string word);
 public:
     void start(); // start the game
     int play(placement move); // accept a placement from a player. returns the score if successful, -1 otherwise
