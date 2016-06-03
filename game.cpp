@@ -59,8 +59,10 @@ void game::start() {
 int game::play(placement move) {
     int score = 0;
     int cross_loc[move.word.length()] = {0};
-    if (validate(move, cross_loc)) {
+    int cross_score = validate(move, cross_loc);
+    if (cross_score != -1) {
         score = gameBoard.place(move);
+        score += cross_score;
         // check for intersections
         // if intersection found, replace with '_'
         for (int i = 0; i < move.word.length(); i++) {
@@ -117,26 +119,26 @@ void game::init(short num) {
     currPlayer = 0;
 }
 
-bool game::validate(placement move, int* cross_loc) {
+int game::validate(placement move, int* cross_loc) {
     if (move.loc < 0 || move.loc > 255) {
-        return false;
+        return -1;
     }
     if (move.dir < 0 || move.dir > 1) {
-        return false;
+        return -1;
     }
     if (move.word.length() > 15) {
-        return false;
+        return -1;
     }
     // at this point we are guaranteed a 0 <= loc <= 255 and word.length() <= 15
     if (move.dir == HORZ) {
         int obds_val = (move.loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-        if (move.loc + move.word.length() > obds_val) return false;
+        if (move.loc + move.word.length() > obds_val) return -1;
     } else {
         int r = move.loc / BOARD_SIDE_LEN;
         int c = move.loc % BOARD_SIDE_LEN;
         int trans_idx = c * BOARD_SIDE_LEN + r;
         int obds_val = (trans_idx / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-        if (trans_idx + move.word.length() > obds_val) return false;
+        if (trans_idx + move.word.length() > obds_val) return -1;
     }
     // at this point we are guaranteed that the word can physically fit on the board
 
@@ -146,92 +148,113 @@ bool game::validate(placement move, int* cross_loc) {
         // if not, then check if the board at that locations contains the letter
         if (!strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
                     move.word[i] != gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
-            return false;
+            return -1;
         } else if (strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
                     move.word[i] == gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
             cross_loc[i] = 1;
         }
     }
     // now check if word is in dictionary
-    if (!dictCheck(move.word)) return false;
+    if (!dictCheck(move.word)) return -1;
     // finally, perform cross checks
     return crossCheck(move);
 }
 
-bool game::crossCheck(placement move) {
+int game::crossCheck(placement move) {
     int loc = move.loc;
     int dir = move.dir;
     string word = move.word;
+    int cross_score = 0;
     for (int i = 0; i < word.length(); i++) {
         if (dir == HORZ) {
             // if this is the start of a word and it's not on the left edge, then check preceeding space
             if (i == 0 && loc % BOARD_SIDE_LEN != 0) {
                 if (gameBoard.get(loc - 1) != ' ') {
-                    return false;
+                    return -1;
                 }
             }
             // if this is the end of the word and it is not on the right edge, check following space
             if (i == word.length() - 1 && (loc + word.length()) % BOARD_SIDE_LEN != (BOARD_SIDE_LEN - 1)) {
                 if (gameBoard.get(loc + word.length()) != ' ') {
-                    return false;
+                    return -1;
                 }
             }
             string ext;
+            short new_loc = loc;
             ext += word.at(i);
             // extend upward
-            int ext_loc = loc - 15;
+            int ext_loc = loc + i - 15;
             while (ext_loc >= 0 && gameBoard.get(ext_loc) != ' ') {
                 ext = gameBoard.get(ext_loc) + ext;
+                new_loc = ext_loc;
                 ext_loc -= 15;
             }
             // extend downward
-            ext_loc = loc + 15;
+            ext_loc = loc + i + 15;
             while (ext_loc < BOARD_SIZE && gameBoard.get(ext_loc) != ' ') {
                 //ext.push_back(gameBoard.get(ext_loc));
                 ext += gameBoard.get(ext_loc);
                 ext_loc += 15;
             }
             if (ext.length() > 1 && !dictCheck(ext)) {
-                return false;
+                return -1;
+            } else if (ext.length() > 1) {
+                cross_score += gameBoard.calcScore(placement{new_loc, VERT, ext});
             }
         } else { // VERT
             // if this is the start of a word and it's not on the top edge, then check above space
             if (i == 0 && loc > 14) {
                 if (gameBoard.get(loc - BOARD_SIDE_LEN) != ' ') {
-                    return false;
+                    return -1;
                 }
             }
             // if this is the end of the word and it is not on the bottom edge, check below space
             if (i == word.length() - 1 && (loc + word.length() * BOARD_SIDE_LEN < BOARD_SIZE - BOARD_SIDE_LEN)) {
                 if (gameBoard.get(loc + word.length() * BOARD_SIDE_LEN) != ' ') {
-                    return false;
+                    return -1;
                 }
             }
             string ext;
             ext.push_back(word[i]);
             // extend leftward
-            int ext_loc = loc - 1;
-            int hi_obds = (loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
+            int ext_loc = loc + 15 * i - 1;
+            int hi_obds = (ext_loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
             int lo_obds = hi_obds - BOARD_SIDE_LEN;
             // lo <= valid < hi
+            int new_loc = loc;
             while (ext_loc >= lo_obds && gameBoard.get(ext_loc) != ' ') {
+                new_loc = ext_loc;
                 ext = gameBoard.get(ext_loc--) + ext;
             }
             // extend rightward
-            ext_loc = loc + 1;
+            ext_loc = loc + 15 * i + 1;
             while (ext_loc < hi_obds && gameBoard.get(ext_loc) != ' ') {
                 ext += gameBoard.get(ext_loc++);
             }
             if (ext.length() > 1 && !dictCheck(ext)) {
-                return false;
+                return -1;
+            } else if (ext.length() > 1) {
+                cross_score += gameBoard.calcScore(placement{new_loc, HORZ, ext});
             }
+
         }
     }
-    return true;
+    bool flag = false;
+    for (int i = 0; i < word.length(); i++) {
+        int ch_loc = loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN);
+        if (gameBoard.get(ch_loc + 1) != ' ' || gameBoard.get(ch_loc - 1) != ' ' || gameBoard.get(ch_loc - 15) != ' ' || gameBoard.get(ch_loc + 15) == ' ') {
+            flag = true;
+        }
+    }
+    if (flag) {
+        return cross_score;
+    } else {
+        return -1;
+    }
 }
 
-//TODO: problem with cross check appears to be in here
 bool game::dictCheck(string word) {
+    word += '\r';
     ifstream file;
     file.open(ED_DICT_FILE);
     if (!file) {
@@ -240,7 +263,7 @@ bool game::dictCheck(string word) {
     string line;
     bool found = false;
     while (getline(file, line) && !found) {
-        found = (bool) strcmp(line.c_str(), word.c_str());
+        found = ! (bool) strcmp(line.c_str(), word.c_str());
     }
     return found;
 }

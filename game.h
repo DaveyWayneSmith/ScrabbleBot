@@ -21,8 +21,8 @@ class game {
     short numPlayers;
     vector<player> players;
     pile tilePile;
-    bool validate(placement move, int* cross_loc); // checks if a placement is valid
-    bool crossCheck(placement move);
+    int validate(placement move, int* cross_loc); // checks if a placement is valid
+    int crossCheck(placement move); // returns sum of cross-checked words, if all are valid, -1 otherwise
     bool dictCheck(string word);
 public:
     void start(); // start the game

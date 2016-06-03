@@ -113,13 +113,13 @@ void board::display() {
                 if (lett == ' ' && multMap.find(currLoc) != multMap.end()) { // if the space is empty, need to check if it is a special tile
                     int mapVal = multMap.at(currLoc);
                     if (mapVal == DL) { // extra check because end iterator evaluates to 0 (for some reason)
-                        cout << "\033[36md l\033[0m";
+                        cout << "\033[1;36md l\033[0m";
                     } else if (mapVal == TL) {
-                        cout << "\033[34mt l\033[0m";
+                        cout << "\033[1;34mt l\033[0m";
                     } else if (mapVal == DW) {
-                        cout << "\033[35md w\033[0m";
+                        cout << "\033[1;35md w\033[0m";
                     } else if (mapVal == TW) {
-                        cout << "\033[31mt w\033[0m";
+                        cout << "\033[1;31mt w\033[0m";
                     }
                     cout << '|';
                 } else if (lett == ' ' && currLoc == CENTER) {
@@ -165,9 +165,9 @@ int board::calcScore(placement move) {
             currLoc = loc + j * BOARD_SIDE_LEN;
         }
         currChar = word[j];
-        if (multMap.find(currLoc) != multMap.end()) {
+        if (multMap.find(currLoc) != multMap.end() && boardArr[currLoc] == ' ') {
             int mapVal = multMap.at(currLoc);
-            if (mapVal == DL) { // extra check because end iterator evaluates to 0 (for some reason)
+            if (mapVal == DL) {
                 score += 2 * valMap.at(currChar);
             } else if (mapVal == TL) {
                 score += 3 * valMap.at(currChar);
