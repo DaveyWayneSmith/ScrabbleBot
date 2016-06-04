@@ -143,18 +143,18 @@ int board::place(placement move) {
     short dir = move.dir;
     short loc = move.loc;
     string word = move.word;
+    int score = calcScore(move);
     for (int i = 0; i < word.length(); i++) {
         boardArr[loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN)] = word[i];
     }
     empty = false;
-    return calcScore(move); //
+    return score;
 }
 
 int board::calcScore(placement move) {
     short loc = move.loc;
     short dir = move.dir;
     string word = move.word;
-
     short multiplier = 1;
     int score = 0;
     char currChar;
@@ -191,6 +191,10 @@ char board::get(int loc) {
     return boardArr[loc];
 }
 
+/*
+ * loc is the location to index. If trans is 1, this index is transposed before indexing the board.
+ * If it is 0, the board is indexed with loc directly.
+ */
 char board::get(int loc, int trans) {
     return boardArr[trans ? TRANSPOSE(loc) : loc];
 }

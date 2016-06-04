@@ -107,9 +107,9 @@ void game::init(short num) {
     numPlayers = num;
     players = vector<player>();
     string tray;
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < numPlayers; i++) {
         tray = "";
-        while (tray.length() < 7) {
+        while (tray.length() < TRAY_SIZE) {
             tray.push_back(tilePile.draw());
         }
         players.push_back(player{0, tray});
@@ -186,9 +186,11 @@ int game::crossCheck(placement move) {
             ext_str += gameBoard.get(ext_idx, dir);
             ext_idx += 15;
         }
+        //TODO this adds the score of a cross word even if it is already on the board
+        // need to fix
         if (ext_str.length() > 1 && !dictCheck(ext_str)) {
             return -1;
-        } else if (ext_str.length() > 1) {
+        } else if (ext_str.length() > 1 && gameBoard.get(norm_loc, dir) != ' ') {
             cross_score += gameBoard.calcScore(placement{dir ? TRANSPOSE(ext_start_loc) : ext_start_loc, dir ? HORZ : VERT, ext_str});
         }
         ch_loc = norm_loc + i;
