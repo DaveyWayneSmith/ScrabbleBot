@@ -6,6 +6,7 @@
 #include <cstring>
 #include <fstream>
 #include <unistd.h>
+#include <algorithm>
 #include "game.h"
 
 void game::start() {
@@ -39,7 +40,7 @@ void game::start() {
             }
             else if (dir == VERT) {
                 // transposing the starting index
-                int trans_idx = TRANSPOSE(loc);
+                int trans_idx = TRANSPOSE(loc, dir); //TODO this is so the compiler shuts up
                 if (trans_idx > CENTER || trans_idx + word.length() < CENTER) {
                     loc = -1;
                     first = true;
@@ -56,31 +57,23 @@ void game::start() {
 
 int game::play(placement move) {
     int score = 0;
-    int cross_loc[move.word.length()] = {0};
-    int cross_score = validate(move, cross_loc);
-    if (cross_score != -1) {
-        score = gameBoard.place(move);
-        score += cross_score;
-        // check for intersections
-        // if intersection found, replace with '_'
-        for (int i = 0; i < move.word.length(); i++) {
-            if (cross_loc[i]) {
-                move.word[i] = '_';
-            }
-        }
-        // replace used characters
-        for (int i = 0; i < move.word.length(); i++) {
-            if (strchr(players[currPlayer].tray.c_str(), move.word[i])) {
-                char ch = tilePile.draw();
-                for (int j = 0; j < players[currPlayer].tray.length(); j++) {
-                    if (move.word[i] == players[currPlayer].tray[j]) {
-                        players[currPlayer].tray[j] = ch;
-                        break;
-                    }
-                }
+    vector<placement> ext = extend(move);
+    if (!validate(move, ext)) return -1;
+    score = gameBoard.calcScore(ext);
+    gameBoard.place(move);
 
-            }
+    // replace used characters
+    string tray = players[currPlayer].tray;
+    int idx;
+    for (auto c : move.word) {
+        if (c == '_') { // if this is an intersection, then continue
+            continue;
+        } else if (tray.find(c) == std::string::npos) { // we need to replace a wildcard
+            idx = (int) tray.find('*');
+        } else {
+            idx = (int) tray.find(c);
         }
+        players[currPlayer].tray[idx] = tilePile.draw();
     }
     return score;
 }
@@ -117,92 +110,62 @@ void game::init(short num) {
     currPlayer = 0;
 }
 
-int game::validate(placement move, int* cross_loc) {
-    if (move.loc < 0 || move.loc > 255) {
-        return -1;
-    }
-    if (move.dir < 0 || move.dir > 1) {
-        return -1;
-    }
-    if (move.word.length() > 15) {
-        return -1;
-    }
-    // at this point we are guaranteed a 0 <= loc <= 255 and word.length() <= 15
-    int norm_idx = move.dir ? TRANSPOSE(move.loc) : move.loc;
-    int obds_val = (norm_idx / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-    if (norm_idx + move.word.length() > obds_val) return -1;
-    // at this point we are guaranteed that the word can physically fit on the board
+vector<placement> game::extend(placement move) {
+    vector<placement> result;
 
-    // now check if the letters are in the tray
-    for (int i = 0; i < move.word.length(); i++) {
-        //first check if tray contains the current letter
-        // if not, then check if the board at that locations contains the letter
-        if (!strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
-                    move.word[i] != gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
-            return -1;
-        } else if (strchr(players[currPlayer].tray.c_str(), move.word[i]) &&
-                    move.word[i] == gameBoard.get((short) (move.loc + i * (move.dir == HORZ ? 1 : BOARD_SIDE_LEN)))) {
-            cross_loc[i] = 1;
-        }
+    //input direction extension
+    string horz_ext;
+    horz_ext += move.word[0];
+    int curr_Loc = TRANSPOSE(move.loc, move.dir) - 1;
+    int return_loc = move.loc;
+    // valid locations are within or equal to lo and hi
+    int lo_obds = TRANSPOSE(move.loc, move.dir) / 15 * 15;
+    int hi_obds = lo_obds + 14;
+    while (TRANSPOSE(curr_Loc, move.dir) >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+        horz_ext = gameBoard.get(curr_Loc, move.dir) + horz_ext;
+        return_loc = TRANSPOSE(curr_Loc, move.dir);
+        curr_Loc--;
     }
-    // now check if word is in dictionary
-    if (!dictCheck(move.word)) return -1;
-    // finally, perform cross checks
-    return crossCheck(move);
-}
+    curr_Loc = TRANSPOSE(move.loc, move.dir) + 1;
+    int i = 1;
+    while (TRANSPOSE(curr_Loc, move.dir) <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
+        if (gameBoard.get(curr_Loc, move.dir) == ' ' && move.word[i] != ' ') {
+            horz_ext = horz_ext + move.word[i];
+        } else {
+            horz_ext = horz_ext + gameBoard.get(curr_Loc, move.dir);
+        }
+        i++;
+        curr_Loc++;
+    }
+    if (horz_ext.length() > 1) {
+        result.push_back(placement{return_loc, move.dir, horz_ext});
+    }
+    //For each letter, extend in cross direction
+    for(i = 0; i < move.word.length(); i++) {
+        if (move.word[i] != '_') {
+            string vert_ext;
+            vert_ext += move.word[i];
+            curr_Loc = TRANSPOSE(move.loc, move.dir) + i - 15;
+            return_loc = TRANSPOSE(move.loc, move.dir);
+            lo_obds = curr_Loc % 15;
+            hi_obds = lo_obds + 210; // index of start of last row
+            while (TRANSPOSE(curr_Loc, move.dir) >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+                vert_ext = gameBoard.get(curr_Loc, move.dir) + vert_ext;
+                return_loc = TRANSPOSE(curr_Loc, move.dir);
+                curr_Loc -= 15;
+            }
 
-int game::crossCheck(placement move) {
-    int loc = move.loc;
-    int dir = move.dir;
-    string word = move.word;
-    int cross_score = 0;
-    bool adj_flag = gameBoard.isempty();
-    int norm_loc;
-    int ch_loc;
-    for (int i = 0; i < word.length(); i++) {
-        norm_loc = dir ? TRANSPOSE(loc) : loc;
-        // if this is the start of a word and it's not on the left edge, then check preceding space
-        if (i == 0 && norm_loc % BOARD_SIDE_LEN != 0 && gameBoard.get(norm_loc - 1, dir) != ' ') {
-            return -1;
-        }
-        // if this is the end of the word and it is not on the right edge, check following space
-        if (i == word.length() - 1 && (norm_loc + word.length()) % BOARD_SIDE_LEN != (BOARD_SIDE_LEN - 1)
-                && gameBoard.get(loc + word.length(), dir) != ' ') {
-            return -1;
-        }
-        string ext_str;
-        int ext_start_loc = norm_loc;
-        ext_str += word.at(i);
-        // extend upward
-        int ext_idx = norm_loc + i - 15;
-        while (ext_idx >= 0 && gameBoard.get(ext_idx, dir) != ' ') {
-            ext_str = gameBoard.get(ext_idx, dir) + ext_str;
-            ext_start_loc = ext_idx;
-            ext_idx -= 15;
-        }
-        // extend downward
-        ext_idx = norm_loc + i + 15;
-        while (ext_idx < BOARD_SIZE && gameBoard.get(ext_idx, dir) != ' ') {
-            ext_str += gameBoard.get(ext_idx, dir);
-            ext_idx += 15;
-        }
-        //TODO this adds the score of a cross word even if it is already on the board
-        // need to fix
-        if (ext_str.length() > 1 && !dictCheck(ext_str)) {
-            return -1;
-        } else if (ext_str.length() > 1 && gameBoard.get(norm_loc, dir) != ' ') {
-            cross_score += gameBoard.calcScore(placement{dir ? TRANSPOSE(ext_start_loc) : ext_start_loc, dir ? HORZ : VERT, ext_str});
-        }
-        ch_loc = norm_loc + i;
-        if (gameBoard.get_adj(ch_loc, dir, 'n') != ' ' || gameBoard.get_adj(ch_loc, dir, 's') != ' ' || gameBoard.get_adj(ch_loc, dir, 'e') != ' ' || gameBoard.get_adj(ch_loc, dir, 'w') != ' ') {
-            adj_flag = true;
+            curr_Loc = TRANSPOSE(move.loc, move.dir) + i + 15;
+            while (TRANSPOSE(curr_Loc, move.dir) <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+                vert_ext = vert_ext + gameBoard.get(curr_Loc, move.dir);
+                curr_Loc += 15;
+            }
+            if (vert_ext.length() > 1) {
+                result.push_back(placement{return_loc, !move.dir, vert_ext});
+            }
         }
     }
-    if (adj_flag) {
-        return cross_score;
-    } else {
-        return -1;
-    }
+    return result;
 }
 
 bool game::dictCheck(string word) {
@@ -218,4 +181,60 @@ bool game::dictCheck(string word) {
         found = ! (bool) strcmp(line.c_str(), word.c_str());
     }
     return found;
+}
+
+bool game::validate(placement origMove, vector<placement> exts) {
+    // check if letters are in tray
+    // TODO this tray is only for debugging
+    string tray = "ABACTERIAL";
+    //string tray = players[currPlayer].tray.c_str();
+    int wild_check = (int) count(tray.begin(), tray.end(), '*');
+    for (auto c : origMove.word) {
+        if (c != '_') {
+            bool found = tray.find(c) != std::string::npos;
+            if (!found && wild_check > 0) {
+                wild_check--;
+            } else if (!found) {
+                return false;
+            }
+        }
+    }
+    // check if word is touching another word
+    if (gameBoard.isempty()) {
+        // check that word crosses middle
+        if (!(TRANSPOSE(origMove.loc, origMove.dir) <= 112
+            && TRANSPOSE(origMove.loc, origMove.dir) + origMove.word.length() >= 112)) {
+            return false;
+        }
+    } else {
+        // check that word is adjacent to something
+        if (exts.size() == 1 && exts[0].word.compare(origMove.word) == 0 ) {
+            return false;
+        }
+    }
+    // check that word will physically fit on board
+    // basic checks
+    if (origMove.loc < 0 || origMove.loc >= 225 || origMove.word.length() > 15) {
+        return false;
+    }
+    // make sure it doesn't go off the edge
+    int norm_loc = TRANSPOSE(origMove.loc, origMove.dir);
+    int lo_obds = norm_loc / 15 * 15;
+    int hi_obds = lo_obds + 14;
+    if (norm_loc + origMove.word.length() > hi_obds) {
+        return false;
+    }
+    // make sure it doesn't overlap with anything
+    for (int i = 0; i < origMove.word.length(); i++) {
+        if (gameBoard.get(norm_loc + i, origMove.dir) != ' ' && origMove.word[i] != '_') {
+            return false;
+        }
+    }
+    // look up every extension in the dictionary
+    for (auto move : exts) {
+        if (!dictCheck(move.word)) {
+            return false;
+        }
+    }
+    return true;
 }

@@ -5,15 +5,16 @@
 #ifndef SCRABBLEBOT_DEFINITIONS_H
 #define SCRABBLEBOT_DEFINITIONS_H
 
-#define TRANSPOSE(loc) (((loc) % 15) * 15 + ((loc) / 15))
+#define TRANSPOSE(loc, dir) ((dir) ? ((loc) % 15) * 15 + ((loc) / 15) : (loc))
 
 static const int VERT = 1;
 static const int HORZ = 0;
 
-static const int DL = 0;
-static const int TL = 1;
-static const int DW = 2;
-static const int TW = 3;
+static const int NO = 0;
+static const int DL = 1;
+static const int TL = 2;
+static const int DW = 3;
+static const int TW = 4;
 
 static const int BOARD_SIZE = 225;
 static const int BOARD_SIDE_LEN = 15;
@@ -26,8 +27,8 @@ static const string ED_DICT_FILE = "C:\\Users\\Edward\\Documents\\ScrabbleBot\\d
 static const string DAVEY_DICT_FILE = "dictionary.txt";
 
 typedef struct placement {
-    short loc;
-    short dir;
+    int loc;
+    int dir;
     string word;
 } placement;
 

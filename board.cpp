@@ -97,6 +97,8 @@ board::board() {
     valMap['Y'] = 4;
     valMap['Z'] = 10;
     valMap['*'] = 0;
+    valMap[' '] = -200; // for debugging purposes
+    valMap['_'] = -200; // these values should never be added to a score
 
 }
 
@@ -137,37 +139,37 @@ void board::display() {
 }
 
 /*
- * NO OUT-OF-BOUNDS ERROR CHECKING
+ * NO ERROR CHECKING OF ANY KIND IS DONE IN THIS METHOD
+ * Places letters on board based on loc, dir and word contained in move
+ * Removes any multipliers that the placed letters are on
+ * Blank spaces are represented as '_' within the word string
  */
 int board::place(placement move) {
-    short dir = move.dir;
-    short loc = move.loc;
+    int loc = TRANSPOSE(move.loc, move.dir);
     string word = move.word;
-    int score = calcScore(move);
     for (int i = 0; i < word.length(); i++) {
-        boardArr[loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN)] = word[i];
+        if (word[i] != '_') {
+            boardArr[TRANSPOSE(loc + i, move.dir)] = word[i];
+            multMap[TRANSPOSE(loc + i, move.dir)] = NO;
+        }
     }
     empty = false;
-    return score;
+    return 0;
 }
 
 int board::calcScore(placement move) {
-    short loc = move.loc;
-    short dir = move.dir;
+    int norm_loc = TRANSPOSE(move.loc, move.dir);
     string word = move.word;
     short multiplier = 1;
     int score = 0;
     char currChar;
-    int currLoc;
-    for (int j = 0; j < word.length(); j++) {
-        if (dir == HORZ) {
-            currLoc = loc + j;
-        } else {
-            currLoc = loc + j * BOARD_SIDE_LEN;
+    for (int i = 0; i < word.length(); i++) {
+        currChar = word[i];
+        if (currChar == '_') {
+            currChar = boardArr[TRANSPOSE(norm_loc + i, move.dir)];
         }
-        currChar = word[j];
-        if (multMap.find(currLoc) != multMap.end() && boardArr[currLoc] == ' ') {
-            int mapVal = multMap.at(currLoc);
+        if (multMap.find(TRANSPOSE(norm_loc + i, move.dir)) != multMap.end()) {
+            int mapVal = multMap.at(TRANSPOSE(norm_loc + i, move.dir));
             if (mapVal == DL) {
                 score += 2 * valMap.at(currChar);
             } else if (mapVal == TL) {
@@ -175,8 +177,10 @@ int board::calcScore(placement move) {
             } else if (mapVal == DW) {
                 multiplier *= 2;
                 score += valMap.at(currChar);
-            } else {
+            } else if (mapVal == TW){
                 multiplier *= 3;
+                score += valMap.at(currChar);
+            } else { // mapVal == NO
                 score += valMap.at(currChar);
             }
         } else {
@@ -184,6 +188,14 @@ int board::calcScore(placement move) {
         }
     }
     score *= multiplier;
+    return score;
+}
+
+int board::calcScore(vector<placement> moves) {
+    int score = 0;
+    for (auto move : moves) {
+        score += calcScore(move);
+    }
     return score;
 }
 
@@ -196,7 +208,7 @@ char board::get(int loc) {
  * If it is 0, the board is indexed with loc directly.
  */
 char board::get(int loc, int trans) {
-    return boardArr[trans ? TRANSPOSE(loc) : loc];
+    return boardArr[TRANSPOSE(loc, trans)];
 }
 
 bool board::isempty() {
@@ -211,7 +223,7 @@ char board::get_adj(int loc, int trans, char dir) {
         transMap['e'] = 's';
         transMap['s'] = 'e';
         dir = transMap.at(dir);
-        return get_adj(TRANSPOSE(loc), 0, dir);
+        return get_adj(TRANSPOSE(loc, 1), 0, dir);
     }
     char result = ' ';
     if (loc > 14 && dir == 'n') {

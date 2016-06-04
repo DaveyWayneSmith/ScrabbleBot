@@ -21,8 +21,8 @@ class game {
     short numPlayers;
     vector<player> players;
     pile tilePile;
-    int validate(placement move, int* cross_loc); // checks if a placement is valid
-    int crossCheck(placement move); // returns sum of cross-checked words, if all are valid, -1 otherwise
+    // TODO This is public only for debugging
+    //vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
     bool dictCheck(string word);
 public:
     void start(); // start the game
@@ -31,6 +31,8 @@ public:
     game(); // default constructor
     game(short num); // constructor that specifies number of players
     void init(short num); // delegate constructor
+    vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
+    bool validate(placement origMove, vector<placement> exts); // validates a player move
 };
 
 
