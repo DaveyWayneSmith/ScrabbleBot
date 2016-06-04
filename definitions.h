@@ -5,6 +5,8 @@
 #ifndef SCRABBLEBOT_DEFINITIONS_H
 #define SCRABBLEBOT_DEFINITIONS_H
 
+#define TRANSPOSE(loc) (((loc) % 15) * 15 + ((loc) / BOARD_SIDE_LEN))
+
 static const int VERT = 1;
 static const int HORZ = 0;
 

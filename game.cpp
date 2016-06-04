@@ -39,9 +39,7 @@ void game::start() {
             }
             else if (dir == VERT) {
                 // transposing the starting index
-                int r = loc / BOARD_SIDE_LEN;
-                int c = loc % BOARD_SIDE_LEN;
-                int trans_idx = c * BOARD_SIDE_LEN + r;
+                int trans_idx = TRANSPOSE(loc);
                 if (trans_idx > CENTER || trans_idx + word.length() < CENTER) {
                     loc = -1;
                     first = true;
@@ -130,16 +128,9 @@ int game::validate(placement move, int* cross_loc) {
         return -1;
     }
     // at this point we are guaranteed a 0 <= loc <= 255 and word.length() <= 15
-    if (move.dir == HORZ) {
-        int obds_val = (move.loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-        if (move.loc + move.word.length() > obds_val) return -1;
-    } else {
-        int r = move.loc / BOARD_SIDE_LEN;
-        int c = move.loc % BOARD_SIDE_LEN;
-        int trans_idx = c * BOARD_SIDE_LEN + r;
-        int obds_val = (trans_idx / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-        if (trans_idx + move.word.length() > obds_val) return -1;
-    }
+    int norm_idx = move.dir ? TRANSPOSE(move.loc) : move.loc;
+    int obds_val = (norm_idx / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
+    if (norm_idx + move.word.length() > obds_val) return -1;
     // at this point we are guaranteed that the word can physically fit on the board
 
     // now check if the letters are in the tray
@@ -165,88 +156,47 @@ int game::crossCheck(placement move) {
     int dir = move.dir;
     string word = move.word;
     int cross_score = 0;
+    bool adj_flag = gameBoard.isempty();
+    int norm_loc;
+    int ch_loc;
     for (int i = 0; i < word.length(); i++) {
-        if (dir == HORZ) {
-            // if this is the start of a word and it's not on the left edge, then check preceeding space
-            if (i == 0 && loc % BOARD_SIDE_LEN != 0) {
-                if (gameBoard.get(loc - 1) != ' ') {
-                    return -1;
-                }
-            }
-            // if this is the end of the word and it is not on the right edge, check following space
-            if (i == word.length() - 1 && (loc + word.length()) % BOARD_SIDE_LEN != (BOARD_SIDE_LEN - 1)) {
-                if (gameBoard.get(loc + word.length()) != ' ') {
-                    return -1;
-                }
-            }
-            string ext;
-            short new_loc = loc;
-            ext += word.at(i);
-            // extend upward
-            int ext_loc = loc + i - 15;
-            while (ext_loc >= 0 && gameBoard.get(ext_loc) != ' ') {
-                ext = gameBoard.get(ext_loc) + ext;
-                new_loc = ext_loc;
-                ext_loc -= 15;
-            }
-            // extend downward
-            ext_loc = loc + i + 15;
-            while (ext_loc < BOARD_SIZE && gameBoard.get(ext_loc) != ' ') {
-                //ext.push_back(gameBoard.get(ext_loc));
-                ext += gameBoard.get(ext_loc);
-                ext_loc += 15;
-            }
-            if (ext.length() > 1 && !dictCheck(ext)) {
-                return -1;
-            } else if (ext.length() > 1) {
-                cross_score += gameBoard.calcScore(placement{new_loc, VERT, ext});
-            }
-        } else { // VERT
-            // if this is the start of a word and it's not on the top edge, then check above space
-            if (i == 0 && loc > 14) {
-                if (gameBoard.get(loc - BOARD_SIDE_LEN) != ' ') {
-                    return -1;
-                }
-            }
-            // if this is the end of the word and it is not on the bottom edge, check below space
-            if (i == word.length() - 1 && (loc + word.length() * BOARD_SIDE_LEN < BOARD_SIZE - BOARD_SIDE_LEN)) {
-                if (gameBoard.get(loc + word.length() * BOARD_SIDE_LEN) != ' ') {
-                    return -1;
-                }
-            }
-            string ext;
-            ext.push_back(word[i]);
-            // extend leftward
-            int ext_loc = loc + 15 * i - 1;
-            int hi_obds = (ext_loc / BOARD_SIDE_LEN + 1) * BOARD_SIDE_LEN;
-            int lo_obds = hi_obds - BOARD_SIDE_LEN;
-            // lo <= valid < hi
-            int new_loc = loc;
-            while (ext_loc >= lo_obds && gameBoard.get(ext_loc) != ' ') {
-                new_loc = ext_loc;
-                ext = gameBoard.get(ext_loc--) + ext;
-            }
-            // extend rightward
-            ext_loc = loc + 15 * i + 1;
-            while (ext_loc < hi_obds && gameBoard.get(ext_loc) != ' ') {
-                ext += gameBoard.get(ext_loc++);
-            }
-            if (ext.length() > 1 && !dictCheck(ext)) {
-                return -1;
-            } else if (ext.length() > 1) {
-                cross_score += gameBoard.calcScore(placement{new_loc, HORZ, ext});
-            }
-
+        norm_loc = dir ? TRANSPOSE(loc) : loc;
+        // if this is the start of a word and it's not on the left edge, then check preceding space
+        if (i == 0 && norm_loc % BOARD_SIDE_LEN != 0 && gameBoard.get(norm_loc - 1, dir) != ' ') {
+            return -1;
+        }
+        // if this is the end of the word and it is not on the right edge, check following space
+        if (i == word.length() - 1 && (norm_loc + word.length()) % BOARD_SIDE_LEN != (BOARD_SIDE_LEN - 1)
+                && gameBoard.get(loc + word.length(), dir) != ' ') {
+            return -1;
+        }
+        string ext_str;
+        int ext_start_loc = norm_loc;
+        ext_str += word.at(i);
+        // extend upward
+        int ext_idx = norm_loc + i - 15;
+        while (ext_idx >= 0 && gameBoard.get(ext_idx, dir) != ' ') {
+            ext_str = gameBoard.get(ext_idx, dir) + ext_str;
+            ext_start_loc = ext_idx;
+            ext_idx -= 15;
+        }
+        // extend downward
+        ext_idx = norm_loc + i + 15;
+        while (ext_idx < BOARD_SIZE && gameBoard.get(ext_idx, dir) != ' ') {
+            ext_str += gameBoard.get(ext_idx, dir);
+            ext_idx += 15;
+        }
+        if (ext_str.length() > 1 && !dictCheck(ext_str)) {
+            return -1;
+        } else if (ext_str.length() > 1) {
+            cross_score += gameBoard.calcScore(placement{dir ? TRANSPOSE(ext_start_loc) : ext_start_loc, dir ? HORZ : VERT, ext_str});
+        }
+        ch_loc = norm_loc + i;
+        if (gameBoard.get_adj(ch_loc, dir, 'n') != ' ' || gameBoard.get_adj(ch_loc, dir, 's') != ' ' || gameBoard.get_adj(ch_loc, dir, 'e') != ' ' || gameBoard.get_adj(ch_loc, dir, 'w') != ' ') {
+            adj_flag = true;
         }
     }
-    bool flag = false;
-    for (int i = 0; i < word.length(); i++) {
-        int ch_loc = loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN);
-        if (gameBoard.get(ch_loc + 1) != ' ' || gameBoard.get(ch_loc - 1) != ' ' || gameBoard.get(ch_loc - 15) != ' ' || gameBoard.get(ch_loc + 15) == ' ') {
-            flag = true;
-        }
-    }
-    if (flag) {
+    if (adj_flag) {
         return cross_score;
     } else {
         return -1;

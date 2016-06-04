@@ -146,6 +146,7 @@ int board::place(placement move) {
     for (int i = 0; i < word.length(); i++) {
         boardArr[loc + i * (dir == HORZ ? 1 : BOARD_SIDE_LEN)] = word[i];
     }
+    empty = false;
     return calcScore(move); //
 }
 
@@ -186,6 +187,37 @@ int board::calcScore(placement move) {
     return score;
 }
 
-char board::get(short loc) {
+char board::get(int loc) {
     return boardArr[loc];
+}
+
+char board::get(int loc, int trans) {
+    return boardArr[trans ? TRANSPOSE(loc) : loc];
+}
+
+bool board::isempty() {
+    return empty;
+}
+
+char board::get_adj(int loc, int trans, char dir) {
+    if (trans) {
+        map<char, char> transMap;
+        transMap['n'] = 'w';
+        transMap['w'] = 'n';
+        transMap['e'] = 's';
+        transMap['s'] = 'e';
+        dir = transMap.at(dir);
+        return get_adj(TRANSPOSE(loc), 0, dir);
+    }
+    char result = ' ';
+    if (loc > 14 && dir == 'n') {
+        result = boardArr[loc - 15];
+    } else if (loc % 15 > 0 && dir == 'w') {
+        result = boardArr[loc - 1];
+    } else if (loc % 15 < 14 && dir == 'e') {
+        result = boardArr[loc + 1];
+    } else if (loc < 210 && dir == 's') {
+        result = boardArr[loc + 15];
+    }
+    return result;
 }
