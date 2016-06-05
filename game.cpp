@@ -12,7 +12,6 @@
 void game::start() {
     int maxscore = 0;
     display();
-    bool first = true;
     while (maxscore < SCORE_CAP) {
         for (auto p:players) {
             if (p.score > maxscore) {
@@ -31,25 +30,11 @@ void game::start() {
         cout << "Enter your word:\n";
         cin >> word;
 
-        // perform first time check to see if word crosses the center
-        if (first) {
-            first = false;
-            if (dir == HORZ && (loc > CENTER || loc + word.length() < CENTER)) {
-                loc = -1;
-                first = true;
-            }
-            else if (dir == VERT) {
-                // transposing the starting index
-                int trans_idx = TRANSPOSE(loc, dir); //TODO this is so the compiler shuts up
-                if (trans_idx > CENTER || trans_idx + word.length() < CENTER) {
-                    loc = -1;
-                    first = true;
-                }
-            }
-        }
 
         int score = play(placement{loc, dir, word});
-        players[currPlayer].score += score;
+        if (score != -1) {
+            players[currPlayer].score += score;
+        }
         currPlayer = ++currPlayer % numPlayers;
         display();
     }
@@ -185,9 +170,9 @@ bool game::dictCheck(string word) {
 
 bool game::validate(placement origMove, vector<placement> *exts) {
     // check if letters are in tray
-    // TODO this tray is only for debugging
-    string tray = "ABACTERIAL";
-    //string tray = players[currPlayer].tray.c_str();
+    // this tray is only for debugging
+    //string tray = "ABACTERIAL";
+    string tray = players[currPlayer].tray.c_str();
     vector<int> stars;
     int wild_check = (int) count(tray.begin(), tray.end(), '*');
     for (int i = 0; i < origMove.word.length(); i++) {
