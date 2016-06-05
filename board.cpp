@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <algorithm>
 #include "board.h"
 
 board::board() {
@@ -167,6 +168,11 @@ int board::calcScore(placement move) {
         currChar = word[i];
         if (currChar == '_') {
             currChar = boardArr[TRANSPOSE(norm_loc + i, move.dir)];
+        } else if (currChar == '*') {
+            wild_loc.push_back(TRANSPOSE(norm_loc + i, move.dir));
+        }
+        if (currChar != '*' && count(wild_loc.begin(), wild_loc.end(), TRANSPOSE(norm_loc + i, move.dir)) != 0) {
+            currChar = '*';
         }
         if (multMap.find(TRANSPOSE(norm_loc + i, move.dir)) != multMap.end()) {
             int mapVal = multMap.at(TRANSPOSE(norm_loc + i, move.dir));

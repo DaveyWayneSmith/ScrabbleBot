@@ -19,6 +19,7 @@ class board {
     char boardArr[BOARD_SIZE];
     map<int, int> multMap;
     map<char, int> valMap;
+    vector<int> wild_loc;
     bool empty = true;
 public:
     board(); // constructor

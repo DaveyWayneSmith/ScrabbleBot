@@ -58,7 +58,7 @@ void game::start() {
 int game::play(placement move) {
     int score = 0;
     vector<placement> ext = extend(move);
-    if (!validate(move, ext)) return -1;
+    if (!validate(move, &ext)) return -1;
     score = gameBoard.calcScore(ext);
     gameBoard.place(move);
 
@@ -121,14 +121,14 @@ vector<placement> game::extend(placement move) {
     // valid locations are within or equal to lo and hi
     int lo_obds = TRANSPOSE(move.loc, move.dir) / 15 * 15;
     int hi_obds = lo_obds + 14;
-    while (TRANSPOSE(curr_Loc, move.dir) >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+    while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
         horz_ext = gameBoard.get(curr_Loc, move.dir) + horz_ext;
         return_loc = TRANSPOSE(curr_Loc, move.dir);
         curr_Loc--;
     }
     curr_Loc = TRANSPOSE(move.loc, move.dir) + 1;
     int i = 1;
-    while (TRANSPOSE(curr_Loc, move.dir) <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
+    while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
         if (gameBoard.get(curr_Loc, move.dir) == ' ' && move.word[i] != ' ') {
             horz_ext = horz_ext + move.word[i];
         } else {
@@ -149,14 +149,14 @@ vector<placement> game::extend(placement move) {
             return_loc = TRANSPOSE(move.loc, move.dir);
             lo_obds = curr_Loc % 15;
             hi_obds = lo_obds + 210; // index of start of last row
-            while (TRANSPOSE(curr_Loc, move.dir) >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+            while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
                 vert_ext = gameBoard.get(curr_Loc, move.dir) + vert_ext;
                 return_loc = TRANSPOSE(curr_Loc, move.dir);
                 curr_Loc -= 15;
             }
 
             curr_Loc = TRANSPOSE(move.loc, move.dir) + i + 15;
-            while (TRANSPOSE(curr_Loc, move.dir) <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+            while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
                 vert_ext = vert_ext + gameBoard.get(curr_Loc, move.dir);
                 curr_Loc += 15;
             }
@@ -183,17 +183,21 @@ bool game::dictCheck(string word) {
     return found;
 }
 
-bool game::validate(placement origMove, vector<placement> exts) {
+bool game::validate(placement origMove, vector<placement> *exts) {
     // check if letters are in tray
     // TODO this tray is only for debugging
     string tray = "ABACTERIAL";
     //string tray = players[currPlayer].tray.c_str();
+    vector<int> stars;
     int wild_check = (int) count(tray.begin(), tray.end(), '*');
-    for (auto c : origMove.word) {
+    for (int i = 0; i < origMove.word.length(); i++) {
+        char c = origMove.word[i];
         if (c != '_') {
             bool found = tray.find(c) != std::string::npos;
             if (!found && wild_check > 0) {
                 wild_check--;
+                int star_loc = TRANSPOSE(TRANSPOSE(origMove.loc, origMove.dir) + i, origMove.dir);
+                stars.push_back(star_loc);
             } else if (!found) {
                 return false;
             }
@@ -208,7 +212,7 @@ bool game::validate(placement origMove, vector<placement> exts) {
         }
     } else {
         // check that word is adjacent to something
-        if (exts.size() == 1 && exts[0].word.compare(origMove.word) == 0 ) {
+        if (exts->size() == 1 && exts->at(0).word.compare(origMove.word) == 0 ) {
             return false;
         }
     }
@@ -221,7 +225,7 @@ bool game::validate(placement origMove, vector<placement> exts) {
     int norm_loc = TRANSPOSE(origMove.loc, origMove.dir);
     int lo_obds = norm_loc / 15 * 15;
     int hi_obds = lo_obds + 14;
-    if (norm_loc + origMove.word.length() > hi_obds) {
+    if (norm_loc + origMove.word.length() - 1 > hi_obds) {
         return false;
     }
     // make sure it doesn't overlap with anything
@@ -231,10 +235,30 @@ bool game::validate(placement origMove, vector<placement> exts) {
         }
     }
     // look up every extension in the dictionary
-    for (auto move : exts) {
+    for (auto move : *exts) {
         if (!dictCheck(move.word)) {
             return false;
         }
     }
+
+    // Replacing wildcards in extended words for calcScore
+    if (stars.size() > 0) {
+        for (int j = 0; j < exts->size(); j++) {
+            placement *move = &exts->at(j);
+            string *word = &move->word;
+            int loc = TRANSPOSE(move->loc, move->dir);
+            for (int k = 0; k < word->length(); k++) {
+                int currloc = loc + k;
+                for (auto star_loc : stars) {
+                    if (TRANSPOSE(currloc, move->dir) == star_loc) {
+                        exts->at(j).word.at(k) = '*';
+                    }
+                }
+
+            }
+        }
+    }
+
+
     return true;
 }

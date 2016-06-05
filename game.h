@@ -32,7 +32,7 @@ public:
     game(short num); // constructor that specifies number of players
     void init(short num); // delegate constructor
     vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
-    bool validate(placement origMove, vector<placement> exts); // validates a player move
+    bool validate(placement origMove, vector<placement> *exts); // validates a player move
 };
 
 
