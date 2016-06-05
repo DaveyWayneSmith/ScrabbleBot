@@ -160,6 +160,9 @@ bool game::dictCheck(string word) {
     if (!file) {
         file.open(DAVEY_DICT_FILE);
     }
+    if (!file) {
+	file.open(PI_DICT_FILE);
+    }
     string line;
     bool found = false;
     while (getline(file, line) && !found) {

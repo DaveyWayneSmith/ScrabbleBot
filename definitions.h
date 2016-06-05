@@ -25,6 +25,7 @@ static const int SCORE_CAP = 100;
 
 static const string ED_DICT_FILE = "C:\\Users\\Edward\\Documents\\ScrabbleBot\\dictionary.txt";
 static const string DAVEY_DICT_FILE = "dictionary.txt";
+static const string PI_DICT_FILE = "/home/pi/ScrabbleBot/dictionary.txt";
 
 typedef struct placement {
     int loc;
