@@ -154,14 +154,14 @@ vector<placement> game::extend(placement move) {
 }
 
 bool game::dictCheck(string word) {
-    word += '\r';
     ifstream file;
-    file.open(ED_DICT_FILE);
+    file.open(DAVEY_DICT_FILE);
     if (!file) {
-        file.open(DAVEY_DICT_FILE);
+        file.open(PI_DICT_FILE);
     }
     if (!file) {
-	file.open(PI_DICT_FILE);
+	    file.open(ED_DICT_FILE);
+        word += '\r'; // append return because of how Windows reads in file
     }
     string line;
     bool found = false;
