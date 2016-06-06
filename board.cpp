@@ -6,6 +6,12 @@
 #include <algorithm>
 #include "board.h"
 
+/*
+ * Default constructor for board
+ * Initializes boardArr[] to all blanks (' ');
+ * Initializes the multMap[] which contains information about which spaces contain multipliers
+ * Initializes valMap[] which contains the point values of each character
+ */
 board::board() {
     for (int i = 0; i < BOARD_SIZE; i++) {
         boardArr[i] = ' ';
@@ -103,6 +109,9 @@ board::board() {
 
 }
 
+/*
+ * Prints out a representation of the current state of the board to stdout
+ */
 void board::display() {
     cout << HEADER;
     for (int i = 0; i < BOARD_SIDE_LEN * 2 + 1; i++) {
@@ -140,10 +149,19 @@ void board::display() {
 }
 
 /*
- * NO ERROR CHECKING OF ANY KIND IS DONE IN THIS METHOD
- * Places letters on board based on loc, dir and word contained in move
- * Removes any multipliers that the placed letters are on
- * Blank spaces are represented as '_' within the word string
+ * @param move A placement struct to be placed on the board
+ * @return 0 (should always return 0. Any other value indicates error)
+ *
+ * Places a move on the board.
+ * NO ERROR CHECKING OF ANY KIND IS DONE IN THIS METHOD!
+ * At this point, the placement is assumed to be a valid move.
+ * If for some reason a part of the move overlaps with something on the board, the characters in the placemnt
+ * will override those already on the board.
+ * Intersections within the bounds of the new word should be represented as '_' in the placement
+ *
+ * This method also removes any multipliers that this move covers. For this reason, calcScore of the move
+ * must be called before the move is placed on the board.
+ * Also sets the empty parameter of the board to false.
  */
 int board::place(placement move) {
     int loc = TRANSPOSE(move.loc, move.dir);
@@ -158,6 +176,12 @@ int board::place(placement move) {
     return 0;
 }
 
+/*
+ * @param move A placement struct to calculate the score for
+ * @return The score value of the placement
+ *
+ * Calculates the raw score of a single placement. Accounts for multipliers and wildcard tiles.
+ */
 int board::calcScore(placement move) {
     int norm_loc = TRANSPOSE(move.loc, move.dir);
     string word = move.word;
@@ -197,6 +221,10 @@ int board::calcScore(placement move) {
     return score;
 }
 
+/*
+ * @param moves A vector of placements
+ * @return the sum of the score of all placements
+ */
 int board::calcScore(vector<placement> moves) {
     int score = 0;
     for (auto move : moves) {
@@ -205,41 +233,24 @@ int board::calcScore(vector<placement> moves) {
     return score;
 }
 
-char board::get(int loc) {
-    return boardArr[loc];
-}
-
 /*
- * loc is the location to index. If trans is 1, this index is transposed before indexing the board.
- * If it is 0, the board is indexed with loc directly.
+ * @param loc An index at which to retrive a character off of the board
+ * @param trans Whether or not the index should be transposed before indexing
+ *
+ * Getter method that accounts for transposed indices. This functionality is such that placing words vertically
+ * and horizontally does not have to be treated as a separate cases. Instead, always wrap user specified locations in the
+ * TRANSPOSE() macro, then pass that location into this method with the transpose flag set to whether or not the move
+ * was horizontal or vertical, (also a user input) and it will work everything out.
  */
 char board::get(int loc, int trans) {
     return boardArr[TRANSPOSE(loc, trans)];
 }
 
+/*
+ * @return whether or not the board has anything on it
+ *
+ * This method is used for validation of the first move of the game
+ */
 bool board::isempty() {
     return empty;
-}
-
-char board::get_adj(int loc, int trans, char dir) {
-    if (trans) {
-        map<char, char> transMap;
-        transMap['n'] = 'w';
-        transMap['w'] = 'n';
-        transMap['e'] = 's';
-        transMap['s'] = 'e';
-        dir = transMap.at(dir);
-        return get_adj(TRANSPOSE(loc, 1), 0, dir);
-    }
-    char result = ' ';
-    if (loc > 14 && dir == 'n') {
-        result = boardArr[loc - 15];
-    } else if (loc % 15 > 0 && dir == 'w') {
-        result = boardArr[loc - 1];
-    } else if (loc % 15 < 14 && dir == 'e') {
-        result = boardArr[loc + 1];
-    } else if (loc < 210 && dir == 's') {
-        result = boardArr[loc + 15];
-    }
-    return result;
 }

@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include "pile.h"
 
+/*
+ * Default constructor for the pile. Initializes frequencies of all the characters.
+ */
 pile::pile() {
     pileMap['A'] = 9;
     pileMap['B'] = 2;
@@ -39,9 +42,15 @@ pile::pile() {
     srand(time(NULL));
 }
 
+/*
+ * @return a character "drawn" at random from the pile
+ *
+ * Selects a character with a weighted random selection based on char frequency
+ * Decrements the frequency of the selected character
+ */
 char pile::draw() {
     if (pileMap.empty()) {
-        return NULL;
+        return ' ';
     }
     // generate weighted keyset
     vector<char> keyset;
@@ -50,7 +59,7 @@ char pile::draw() {
             keyset.push_back(it.first);
         }
     }
-    int idx = rand() % keyset.size();
+    int idx = (int) (rand() % keyset.size());
     char ch = keyset[idx];
     int freq = pileMap.at(ch);
     if (freq <= 1) {
@@ -59,4 +68,16 @@ char pile::draw() {
         pileMap[ch]--;
     }
     return ch;
+}
+
+/*
+ * @param ch A character to put back in the pile
+ * @return a new character
+ *
+ * Draws a character from the pile and then adds the input character back to the pile
+ */
+char pile::replace(char ch) {
+    char result = draw();
+    pileMap.at(ch)++;
+    return result;
 }

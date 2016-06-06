@@ -9,6 +9,7 @@ class pile {
 public:
     pile(); // constructor
     char draw(); // draw method
+    char replace(char ch); // return a character to the pile and get a new one
 };
 
 #endif //SCRABBLEBOT_PILE_H

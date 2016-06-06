@@ -9,6 +9,17 @@
 #include <algorithm>
 #include "game.h"
 
+/*
+ * Contains the game loop
+ * Gets moves from user input
+ * If the move is valid,
+ *      it is placed on the board
+ *      The score of the player is incremented
+ *      The game advances to the next player's turn
+ * Otherwise,
+ *      the score and state of the board are unchanged
+ *      the game advances to the next player
+ */
 void game::start() {
     int maxscore = 0;
     display();
@@ -40,6 +51,14 @@ void game::start() {
     }
 }
 
+/*
+ * @param move The move to potentially be placed on the board
+ * @return the score of the move if it was valid, -1 otherwise
+ *
+ * Validates moves and placed them on the board if they are valid.
+ * Also replaces letters in the current player's tray if the move was valid
+ * Returns the score of a valid move, -1 if not valid
+ */
 int game::play(placement move) {
     int score = 0;
     vector<placement> ext = extend(move);
@@ -63,6 +82,9 @@ int game::play(placement move) {
     return score;
 }
 
+/*
+ * Prints a representation of the current state of the game to stdout
+ */
 void game::display() {
     gameBoard.display();
     for (int i = 0; i < numPlayers; i++) {
@@ -71,14 +93,28 @@ void game::display() {
     fprintf(stdout, "It's currently Player %d's turn\n", currPlayer + 1);
 }
 
+/*
+ * Default constructor
+ * Creates a game class with 2 players
+ */
 game::game() {
     init(2);
 }
 
+/*
+ * @param num The number of players this game should handle
+ *
+ * Constructor that allows specification of number of players
+ */
 game::game(short num) {
     init(num);
 }
 
+/*
+ * @param num the number of players this game will handle
+ *
+ * Delegation constructor that instantiates necessary information for the game
+ */
 void game::init(short num) {
     gameBoard = board();
     tilePile = pile();
@@ -95,6 +131,13 @@ void game::init(short num) {
     currPlayer = 0;
 }
 
+/*
+ * @param move A placement struct that specifies a move to be played
+ * @return A vector of placement structs specifying all char sequences that intersect with the given placement
+ *
+ * Calculates all char sequences that intersect with a given move. Will extend char sequences off of every
+ * inputted character until a blank or the edge of the board is found.
+ */
 vector<placement> game::extend(placement move) {
     vector<placement> result;
 
@@ -153,6 +196,13 @@ vector<placement> game::extend(placement move) {
     return result;
 }
 
+/*
+ * @param word A string to look up in the dictionary
+ * @return a boolean of whether or not the word was found in the dictionary
+ *
+ * Looks up words in the dictionary
+ * Does some jank stuff with '\r' to get it to work on Windows and Mac/Linux
+ */
 bool game::dictCheck(string word) {
     ifstream file;
     file.open(DAVEY_DICT_FILE);
@@ -171,6 +221,17 @@ bool game::dictCheck(string word) {
     return found;
 }
 
+/*
+ * @param origMove The placement struct of the new characters the player is playing
+ * @param exts A pointer to the vector of placements that extend off of the players move,
+ *      as calculated by the extend() method
+ * @return whether or not the move is valid
+ *
+ * This method "polices" the game. It checks if the move violates any rules of the game and if so, returns false.
+ * If the move is valid, it returns true. It also modifies exts to contain '*' anywhere a wildcard is necessary
+ * in any of the extensions. This allows calcScore to properly calculate the score of the move without counting
+ * wildcard tiles.
+ */
 bool game::validate(placement origMove, vector<placement> *exts) {
     // check if letters are in tray
     // this tray is only for debugging
