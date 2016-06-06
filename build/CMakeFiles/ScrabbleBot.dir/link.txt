@@ -1,0 +1,1 @@
+/usr/bin/c++    -std=c++11    CMakeFiles/ScrabbleBot.dir/main.cpp.o CMakeFiles/ScrabbleBot.dir/pile.cpp.o CMakeFiles/ScrabbleBot.dir/game.cpp.o CMakeFiles/ScrabbleBot.dir/board.cpp.o  -o ScrabbleBot -rdynamic 
