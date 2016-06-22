@@ -33,4 +33,10 @@ typedef struct placement {
     string word;
 } placement;
 
+typedef struct player {
+    int score;
+    string tray;
+    bool ai;
+} player;
+
 #endif //SCRABBLEBOT_DEFINITIONS_H

@@ -29,20 +29,7 @@ void game::start() {
                 maxscore = p.score;
             }
         }
-        short loc;
-        cout << "Enter a starting location:\n";
-        cin >> loc;
-
-        short dir;
-        cout << "Enter a direction (HORZ = 0 | VERT = 1):\n";
-        cin >> dir;
-
-        string word;
-        cout << "Enter your word:\n";
-        cin >> word;
-
-
-        int score = play(placement{loc, dir, word});
+        int score = play(manager.getMove(players[currPlayer]));
         if (score != -1) {
             players[currPlayer].score += score;
         }
@@ -50,6 +37,8 @@ void game::start() {
         display();
     }
 }
+
+
 
 /*
  * @param move The move to potentially be placed on the board
@@ -88,9 +77,9 @@ int game::play(placement move) {
 void game::display() {
     gameBoard.display();
     for (int i = 0; i < numPlayers; i++) {
-        fprintf(stdout, "Player %d Score: %d\nPlayer %d Tray: %s\n\n", i + 1, players[i].score, i + 1, players[i].tray.c_str());
+        fprintf(stdout, "Player %d Score: %d\n", i + 1, players[i].score, i + 1);
     }
-    fprintf(stdout, "It's currently Player %d's turn\n", currPlayer + 1);
+    fprintf(stdout, "\nIt's currently Player %d's turn\n", currPlayer + 1);
 }
 
 /*
@@ -98,7 +87,10 @@ void game::display() {
  * Creates a game class with 2 players
  */
 game::game() {
-    init(2);
+    vector<bool> type = vector<bool>(2);
+    type.push_back(0);
+    type.push_back(0);
+    init(type);
 }
 
 /*
@@ -106,8 +98,8 @@ game::game() {
  *
  * Constructor that allows specification of number of players
  */
-game::game(short num) {
-    init(num);
+game::game(vector<bool> playerType) {
+    init(playerType);
 }
 
 /*
@@ -115,10 +107,10 @@ game::game(short num) {
  *
  * Delegation constructor that instantiates necessary information for the game
  */
-void game::init(short num) {
+void game::init(vector<bool> playerType) {
     gameBoard = board();
     tilePile = pile();
-    numPlayers = num;
+    numPlayers = (short) playerType.size();
     players = vector<player>();
     string tray;
     for (int i = 0; i < numPlayers; i++) {
@@ -126,7 +118,7 @@ void game::init(short num) {
         while (tray.length() < TRAY_SIZE) {
             tray.push_back(tilePile.draw());
         }
-        players.push_back(player{0, tray});
+        players.push_back(player{0, tray, playerType[i]});
     }
     currPlayer = 0;
 }
