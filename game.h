@@ -12,12 +12,12 @@
 
 
 class game {
-    board gameBoard;
+    board gameBoard = board();;
     short currPlayer;
     short numPlayers;
     vector<player> players;
     pile tilePile;
-    LetterRip theAI = LetterRip();
+    LetterRip theAI = LetterRip(&gameBoard);
     PlayerManager manager = PlayerManager(&theAI);
     // TODO This is public only for debugging
     //vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement

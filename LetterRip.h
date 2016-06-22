@@ -8,9 +8,13 @@
 using namespace std;
 #include <string>
 #include "definitions.h"
+#include "board.h"
 
 class LetterRip {
+    board* gameBoard;
+    unsigned int metaBoard[BOARD_SIZE];
 public:
+    LetterRip::LetterRip(board* board);
     placement getMove(string tray); // generate the ultimate move
 };
 

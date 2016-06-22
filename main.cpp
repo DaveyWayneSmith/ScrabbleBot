@@ -7,19 +7,16 @@
 using namespace std;
 
 int main() {
-//    dawgdic::DawgBuilder dawg_builder;
-//    dawg_builder.Insert("apple");
-//    dawg_builder.Insert("orange");
-//
-//    dawgdic::Dawg dawg;
-//    dawg_builder.Finish(&dawg);
-//
-//    dawgdic::Dictionary dict;
-//    dawgdic::DictionaryBuilder::Build(dawg, &dict);
-//
-//    if (dict.Contains("apple")) {
-//        std::cout << "apple found\n";
-//    }
+    dawgdic::DawgBuilder dawg_builder;
+    dawg_builder.Insert("apple");
+    dawg_builder.Insert("orange");
+
+    dawgdic::Dawg dawg;
+    dawg_builder.Finish(&dawg);
+
+    dawgdic::Dictionary dict;
+    dawgdic::DictionaryBuilder::Build(dawg, &dict);
+
 
     int num_players;
     do {

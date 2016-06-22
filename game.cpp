@@ -108,7 +108,6 @@ game::game(vector<bool> playerType) {
  * Delegation constructor that instantiates necessary information for the game
  */
 void game::init(vector<bool> playerType) {
-    gameBoard = board();
     tilePile = pile();
     numPlayers = (short) playerType.size();
     players = vector<player>();
