@@ -3,20 +3,24 @@
 #include <dictionary.h>
 #include <dictionary-builder.h>
 #include "game.h"
+#include "myDictionary.h"
 
 using namespace std;
 
 int main() {
-    dawgdic::DawgBuilder dawg_builder;
-    dawg_builder.Insert("apple");
-    dawg_builder.Insert("orange");
+    myDictionary dict = myDictionary();
+    bool a = dict.exactLookup("APPLE");
+    bool b = dict.exactLookup("QQ");
+    bool c = dict.exactLookup("SEVENTEEN");
+    bool d = dict.exactLookup("ZOO");
+    bool e = dict.exactLookup("AAA");
+    cout << a + '\n';
+    cout << b + '\n';
+    cout << c + '\n';
+    cout << d + '\n';
+    cout << e + '\n';
 
-    dawgdic::Dawg dawg;
-    dawg_builder.Finish(&dawg);
-
-    dawgdic::Dictionary dict;
-    dawgdic::DictionaryBuilder::Build(dawg, &dict);
-
+    dict.partialLookup("AB");
 
     int num_players;
     do {

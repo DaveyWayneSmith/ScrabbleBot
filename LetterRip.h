@@ -14,7 +14,7 @@ class LetterRip {
     board* gameBoard;
     unsigned int metaBoard[BOARD_SIZE];
 public:
-    LetterRip::LetterRip(board* board);
+    LetterRip(board* theBoard);
     placement getMove(string tray); // generate the ultimate move
 };
 

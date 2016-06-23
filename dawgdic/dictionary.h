@@ -220,8 +220,8 @@ public:
   std::vector<DictionaryUnit> units_buf_;
 
   // Disallows copies.
-  Dictionary(const Dictionary &);
-  Dictionary &operator=(const Dictionary &);
+//  Dictionary(const Dictionary &);
+//  Dictionary &operator=(const Dictionary &);
 };
 
 }  // namespace dawgdic

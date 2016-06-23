@@ -8,14 +8,14 @@
       <sourceFolder url="file://$MODULE_DIR$/definitions.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PlayerManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/myDictionary.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Dictionary.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/pile.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/board.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/board.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/myDictionary.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Dictionary.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/PlayerManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/LetterRip.cpp" isTestSource="false" />
     </content>
