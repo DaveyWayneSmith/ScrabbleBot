@@ -20,7 +20,7 @@ int main() {
     cout << d + '\n';
     cout << e + '\n';
 
-    dict.partialLookup("AB");
+    vector<string> test = dict.partialLookup("AB", 3);
 
     int num_players;
     do {

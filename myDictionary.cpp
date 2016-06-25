@@ -26,7 +26,7 @@ myDictionary::myDictionary() {
         line.erase( std::remove(line.begin(), line.end(), '\r'), line.end() ); // clean the line
         dawg_builder.Insert(line.c_str());
     }
-
+    file.close();
     dawgdic::Dawg dawg;
     dawg_builder.Finish(&dawg);
 
@@ -37,8 +37,31 @@ bool myDictionary::exactLookup(std::string word) {
     return dict.Contains(word.c_str());
 }
 
-void myDictionary::partialLookup(string key) {
-    filter(dict, key.c_str());
+vector<string> myDictionary::partialLookup(string key, unsigned long start, bool exact) {
+    //filter(dict, key.c_str());
+    vector<string> result;
+    std::ifstream file;
+    file.open(DAVEY_DICT_FILE.c_str());
+    if (!file) {
+        file.open(PI_DICT_FILE.c_str());
+    }
+    if (!file) {
+        file.open(ED_DICT_FILE.c_str());
+    }
+    std::string line;
+    while (getline(file, line)) {
+        line.erase( std::remove(line.begin(), line.end(), '\r'), line.end() ); // clean the line
+        size_t idx = line.find(key, start);
+        if (idx != string::npos && (exact ? idx == start : true)) { // if the word contains the key
+            result.push_back(line);
+        }
+    }
+    file.close();
+    return result;
+}
+
+vector<string> myDictionary::partialLookup(string key) {
+    partialLookup(key, 1, false);
 }
 
 void myDictionary::filter(const dawgdic::Dictionary &dic, const char *text) {
