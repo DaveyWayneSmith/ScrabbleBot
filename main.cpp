@@ -14,13 +14,8 @@ int main() {
     bool c = dict.exactLookup("SEVENTEEN");
     bool d = dict.exactLookup("ZOO");
     bool e = dict.exactLookup("AAA");
-    cout << a + '\n';
-    cout << b + '\n';
-    cout << c + '\n';
-    cout << d + '\n';
-    cout << e + '\n';
 
-    vector<string> test = dict.partialLookup("AB", 3);
+    set<string> test = dict.partialLookup("AB", 3, true);
 
     int num_players;
     do {
