@@ -47,3 +47,25 @@ set<string> myDictionary::partialLookup(string key, unsigned long start, bool ex
 set<string> myDictionary::partialLookup(string key) {
     partialLookup(key, 1, false);
 }
+
+bool myDictionary::partialExists(string key) {
+    for (auto s = slow_dict.begin(); s != slow_dict.end(); ++s) {
+        string str = *s;
+        size_t idx = str.find(key);
+        if (idx != string::npos) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool myDictionary::prefixExists(string key) {
+    for (auto s = slow_dict.begin(); s != slow_dict.end(); ++s) {
+        string str = *s;
+        size_t idx = str.find(key);
+        if (idx != string::npos && idx == 0) {
+            return true;
+        }
+    }
+    return false;
+}

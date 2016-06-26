@@ -254,3 +254,68 @@ char board::get(int loc, int trans) {
 bool board::isempty() {
     return empty;
 }
+/*
+ * @return character at adj space or space if nothing is there
+ *
+ * This method is used in finding anchor points for the AI
+ */
+char board::get_adj(int loc, int trans, char dir) {
+    if (trans) {
+        map<char, char> transMap;
+        transMap['n'] = 'w';
+        transMap['w'] = 'n';
+        transMap['e'] = 's';
+        transMap['s'] = 'e';
+        dir = transMap.at(dir);
+        return get_adj(TRANSPOSE(loc, trans), HORZ, dir);
+    }
+    char result = ' ';
+    if (loc < 0 || loc > BOARD_SIZE - 1) {
+        return result;
+    }
+    if (loc > 14 && dir == 'n') {
+        result = boardArr[loc - 15];
+    } else if (loc % 15 > 0 && dir == 'w') {
+        result = boardArr[loc - 1];
+    } else if (loc % 15 < 14 && dir == 'e') {
+        result = boardArr[loc + 1];
+    } else if (loc < 210 && dir == 's') {
+        result = boardArr[loc + 15];
+    }
+    return result;
+}
+
+string board::get_adj_string(int loc, int trans, char dir) {
+    if (trans) {
+        map<char, char> transMap;
+        transMap['n'] = 'w';
+        transMap['w'] = 'n';
+        transMap['e'] = 's';
+        transMap['s'] = 'e';
+        dir = transMap.at(dir);
+        return get_adj_string(TRANSPOSE(loc, trans), HORZ, dir);
+    }
+    string result = "";
+    if (dir == 'n') {
+        while (this->get_adj(loc, trans, dir) != ' ') {
+            loc -= 15;
+            result = boardArr[loc] + result;
+        }
+    } else if (dir == 'w') {
+        while (this->get_adj(loc, trans, dir) != ' ') {
+            loc--;
+            result = boardArr[loc] + result;
+        }
+    } else if (dir == 'e') {
+        while (this->get_adj(loc, trans, dir) != ' ') {
+            loc++;
+            result += boardArr[loc];
+        }
+    } else if (dir == 's') {
+        while (this->get_adj(loc, trans, dir) != ' ') {
+            loc += 15;
+            result += boardArr[loc];
+        }
+    }
+    return result;
+}

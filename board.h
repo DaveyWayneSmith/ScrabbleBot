@@ -31,6 +31,7 @@ public:
     char get(int loc, int trans); // get a character off the board; the second input specifies whether or not to transpose the given location
     bool isempty(); // returns whether or not there is anything on the board
     char get_adj(int loc, int trans, char dir); // get adjacent characters off of the board. The second input can be 'n', 's', 'e', or 'w'
+    string get_adj_string(int loc, int trans, char dir); // get the longest possible string off of the board in any given direction, not including the given location
 };
 
 

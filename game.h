@@ -12,7 +12,7 @@
 
 
 class game {
-    board gameBoard = board();;
+    board gameBoard = board();
     short currPlayer;
     short numPlayers;
     vector<player> players;
