@@ -44,16 +44,27 @@ int main() {
     gameBoard.place(placement{98, HORZ, "HISTLE"});
     gameBoard.place(placement{140, HORZ, "LE_TER"});
     gameBoard.place(placement{170, HORZ, "NO_TH"});
-    gameBoard.place(placement{110, VERT, "CA_E_DAR"});
+//    gameBoard.place(placement{110, VERT, "CA_E_DAR"});
     gameBoard.display();
-    vector<int> anchors = ai.getAnchorPoints();
+//    placement testPlacement;
+//    int maxScore;
 
-    placement maxMove;
-    int maxScore = -1;
-    ai.extendRight(38, 38, "T", "", "XAETSRI", &maxMove, &maxScore);
+//    ai.extendLeft(214,"","","XAETSRI",&testPlacement,&maxScore);
+//    cout << testPlacement.word;
+//    cout << "\n";
+//    cout << maxScore;
+//    cout << "\n";
+//
+//    maxScore = -1;
+//
+//    ai.extendLeft(216,"","","XAETSRI",&testPlacement,&maxScore);
+//    cout << testPlacement.word;
+//    cout << "\n";
+//    cout << maxScore;
+//    cout << "\n";
+    gameBoard.place(ai.getMove("XAETSRI"));
 
-    cout << maxMove.word + "\n";
-    cout << maxScore + "\n";
+    gameBoard.display();
 
     return 0;
 }

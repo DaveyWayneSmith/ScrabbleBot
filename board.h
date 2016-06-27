@@ -32,6 +32,7 @@ public:
     bool isempty(); // returns whether or not there is anything on the board
     char get_adj(int loc, int trans, char dir); // get adjacent characters off of the board. The second input can be 'n', 's', 'e', or 'w'
     string get_adj_string(int loc, int trans, char dir); // get the longest possible string off of the board in any given direction, not including the given location
+    bool checkBounds(placement test); // check if a placement will fit on the board (the AI uses this)
 };
 
 

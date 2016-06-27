@@ -319,3 +319,16 @@ string board::get_adj_string(int loc, int trans, char dir) {
     }
     return result;
 }
+
+bool board::checkBounds(placement test) {
+    // check that word will physically fit on board
+    // basic checks
+    if (test.loc < 0 || test.loc >= 225 || test.word.length() > 15) {
+        return false;
+    }
+    // make sure it doesn't go off the edge
+    int norm_loc = TRANSPOSE(test.loc, test.dir);
+    int lo_obds = norm_loc / 15 * 15;
+    int hi_obds = lo_obds + 14;
+    return !(norm_loc + test.word.length() - 1 > hi_obds);
+}

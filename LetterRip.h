@@ -10,7 +10,6 @@ using namespace std;
 #include "definitions.h"
 #include "board.h"
 #include "myDictionary.h"
-#include "game.h"
 
 class LetterRip {
     board* gameBoard;
@@ -22,7 +21,7 @@ public:
     vector<int> getAnchorPoints();  // gets a vector containing all anchor points
     unsigned int crossCheck(int i); // calculate a bit vector of possible characters at a given index
     void extendLeft(int idx, string word, string placement_word, string tray, placement* maxMove, int* maxScore);
-    void extendRight(int idx, int start_idx, string word, string placement_word, string tray, placement* maxMove, int* maxScore);
+    void extendRight(int idx, int start_idx, string copy, string placement_word, string tray, placement* maxMove, int* maxScore);
 };
 
 
