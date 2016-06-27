@@ -10,6 +10,7 @@ PlayerManager::PlayerManager(LetterRip* AI) {
 
 placement PlayerManager::getMove(player currPlayer) {
     if (currPlayer.ai) {
+        cout << "AI Tray: " + currPlayer.tray + "\n";
         return theAI->getMove(currPlayer.tray);
     } else {
         return promptMove(currPlayer.tray);
