@@ -77,7 +77,7 @@ void LetterRip::extendRight(int idx, int start_idx, int trans, string word, stri
         }
         if (dict.exactLookup(copy)) { // we could stop here and have a valid move
             int end = (int) copy_placement.size() - 1;
-            placement_word = copy_placement.at(end) == '_' ? copy_placement.erase(end) : copy_placement;
+            copy_placement = copy_placement.at(end) == '_' ? copy_placement.erase(end) : copy_placement;
             placement test_placement = placement{TRANSPOSE(start_idx, trans), trans, copy_placement};
             int test_score = gameBoard->calcScore(test_placement);
             if (test_score > *maxScore) {

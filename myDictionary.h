@@ -7,9 +7,11 @@
 
 
 #include <set>
+#include "trie.h"
 
 class myDictionary {
     set<string> slow_dict;
+    trie_t theTrie;
 public:
     myDictionary();
     set<string> partialLookup(string key); //find all words that contain 'key'
