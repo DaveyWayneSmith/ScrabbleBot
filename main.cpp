@@ -1,18 +1,14 @@
 #include <iostream>
-#include <dawg-builder.h>
-#include <dictionary.h>
-#include <dictionary-builder.h>
 #include "game.h"
-#include "myDictionary.h"
 
 using namespace std;
 
 int main() {
+    DictTrie dict = DictTrie();
+    bool a = dict.containsWord("APPLE");
+    bool b = dict.containsPrefix("PL");
 
-
-
-    // TODO: Commented out for testing purposes
-    int num_players;
+    int num_players = 0;
     do {
         cout << "How many players are there?\n";
         cin >> num_players;

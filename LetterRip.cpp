@@ -16,7 +16,7 @@ placement LetterRip::getMove(string tray) {
 
 LetterRip::LetterRip(board* board) {
     gameBoard = board;
-    dict = myDictionary();
+    dict = DictTrie();
 }
 
 vector<int> LetterRip::getAnchorPoints() {
@@ -27,15 +27,6 @@ vector<int> LetterRip::getAnchorPoints() {
         }
     }
     return anchorLocs;
-}
-
-void preCompCrossWords() {
-
-}
-
-unsigned int LetterRip::crossCheck(int i) {
-    unsigned int result = 0;
-
 }
 
 void LetterRip::extendLeft(int idx, int trans, string word, string placement_word, string tray, placement* maxMove, int* maxScore) {
@@ -57,10 +48,10 @@ void LetterRip::extendLeft(int idx, int trans, string word, string placement_wor
             if (lhs.size() != 0 || rhs.size() != 0) {
                 string crossWord =
                         gameBoard->get_adj_string(idx, trans, 'n') + tray[i] + gameBoard->get_adj_string(idx, trans, 's');
-                crossCheck = dict.exactLookup(crossWord);
+                crossCheck = dict.containsWord(crossWord);
             }
             if (crossCheck) {
-                extendRight(idx + copy.size(), idx, trans, copy, copy_placement, new_tray, maxMove, maxScore);
+                extendRight((int) (idx + copy.size()), idx, trans, copy, copy_placement, new_tray, maxMove, maxScore);
             }
         }
     }
@@ -69,14 +60,14 @@ void LetterRip::extendLeft(int idx, int trans, string word, string placement_wor
 void LetterRip::extendRight(int idx, int start_idx, int trans, string word, string placement_word, string tray, placement* maxMove, int* maxScore) {
     string copy = word;
     string copy_placement = placement_word;
-    if (gameBoard->get(idx, HORZ) != ' ') {
+    if (gameBoard->get(idx, HORZ) != ' ') { // if the current location contains a letter
         copy += gameBoard->get(idx, HORZ);
-        if (dict.prefixExists(copy)) { // cross check is always true
+        if (dict.containsPrefix(copy)) { // cross check is always true
             copy_placement += "_";
             extendRight(idx + 1, start_idx, trans, copy, copy_placement, tray, maxMove, maxScore);
         }
-        if (dict.exactLookup(copy)) { // we could stop here and have a valid move
-            int end = (int) copy_placement.size() - 1;
+        if (dict.containsWord(copy)) { // we could stop here and have a valid move
+            auto end = copy_placement.size() - 1;
             copy_placement = copy_placement.at(end) == '_' ? copy_placement.erase(end) : copy_placement;
             placement test_placement = placement{TRANSPOSE(start_idx, trans), trans, copy_placement};
             int test_score = gameBoard->calcScore(test_placement);
@@ -85,7 +76,7 @@ void LetterRip::extendRight(int idx, int start_idx, int trans, string word, stri
                 *maxMove = test_placement;
             }
         }
-    } else {
+    } else { // the current location is blank
         string lhs = gameBoard->get_adj_string(idx, trans, 'n');
         string rhs = gameBoard->get_adj_string(idx, trans, 's');
         for (int i = 0; i < tray.size(); i++) {
@@ -97,15 +88,15 @@ void LetterRip::extendRight(int idx, int start_idx, int trans, string word, stri
             if (lhs.size() != 0 || rhs.size() != 0) {
                 string crossWord =
                         gameBoard->get_adj_string(idx, trans, 'n') + tray[i] + gameBoard->get_adj_string(idx, trans, 's');
-                crossCheck = dict.exactLookup(crossWord);
+                crossCheck = dict.containsWord(crossWord);
             }
             placement test_placement = placement{TRANSPOSE(start_idx, trans), trans, copy_placement};
             if (gameBoard->checkBounds(test_placement) && crossCheck) {
-                if (dict.prefixExists(copy)) {
+                if (dict.containsPrefix(copy)) {
                     string new_tray = tray.substr(0, i) + tray.substr(i + 1, tray.size() - 1);
                     extendRight(idx + 1, start_idx, trans, copy, copy_placement, new_tray, maxMove, maxScore);
                 }
-                if (dict.exactLookup(copy)) { // we could stop here and have a valid move
+                if (dict.containsWord(copy)) { // we could stop here and have a valid move
                     int test_score = gameBoard->calcScore(test_placement);
                     if (test_score > *maxScore) {
                         *maxScore = test_score;

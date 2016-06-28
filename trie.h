@@ -30,10 +30,17 @@ public:
 
     void addWord(std::string word) {
         if (word.length()>0) {
+            // counts number of words added
+            // but if you add the same word more than once
+            // this size will differ from the set size
+            // which is unique words in trie
             ++_size;
             std::string subword = word.substr(1, word.size()-1);
             if (_children[word[0]]) {
-                _children[word[0]]->addWord(subword);
+                if ( word.size() == 1 )
+                    _children[word[0]]->_isEnd = true;
+                else
+                    _children[word[0]]->addWord(subword);
             } else {
                 trie_t *tmp = new trie_t(word.size()==1);
                 tmp->addWord(subword);
