@@ -5,6 +5,7 @@
 #include <fstream>
 #include "DictTrie.h"
 #include "definitions.h"
+#include <algorithm>
 
 DictTrie::DictTrie() {
     root = new TrieNode();
@@ -18,8 +19,8 @@ DictTrie::DictTrie() {
         file.open(ED_DICT_FILE.c_str());
     }
     string curWord;
-    while (file >> curWord) {
-        curWord.erase(curWord.find_last_not_of(" \n\r\t")); // clean the line
+    while (getline(file, curWord)) {
+        curWord.erase(std::remove(curWord.begin(), curWord.end(), '\r'), curWord.end());
         insert(curWord);
     }
     file.close();

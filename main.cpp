@@ -4,10 +4,6 @@
 using namespace std;
 
 int main() {
-    DictTrie dict = DictTrie();
-    bool a = dict.containsWord("APPLE");
-    bool b = dict.containsPrefix("PL");
-
     int num_players = 0;
     do {
         cout << "How many players are there?\n";
