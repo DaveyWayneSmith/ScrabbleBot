@@ -13,15 +13,15 @@
 
 class game {
     board gameBoard = board();
+    DictTrie dictionary = DictTrie();
     short currPlayer;
     short numPlayers;
     vector<player> players;
     pile tilePile;
-    LetterRip theAI = LetterRip(&gameBoard);
+    LetterRip theAI = LetterRip(&gameBoard, &dictionary);
     PlayerManager manager = PlayerManager(&theAI);
     // TODO This is public only for debugging
     //vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
-    bool dictCheck(string word);
 public:
     void start(); // start the game
     int play(placement move); // accept a placement from a player. returns the score if successful, -1 otherwise

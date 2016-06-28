@@ -188,31 +188,6 @@ vector<placement> game::extend(placement move) {
 }
 
 /*
- * @param word A string to look up in the dictionary
- * @return a boolean of whether or not the word was found in the dictionary
- *
- * Looks up words in the dictionary
- * Does some jank stuff with '\r' to get it to work on Windows and Mac/Linux
- */
-bool game::dictCheck(string word) {
-    ifstream file;
-    file.open(DAVEY_DICT_FILE);
-    if (!file) {
-        file.open(PI_DICT_FILE);
-    }
-    if (!file) {
-	    file.open(ED_DICT_FILE);
-        word += '\r'; // append return because of how Windows reads in file
-    }
-    string line;
-    bool found = false;
-    while (getline(file, line) && !found) {
-        found = ! (bool) strcmp(line.c_str(), word.c_str());
-    }
-    return found;
-}
-
-/*
  * @param origMove The placement struct of the new characters the player is playing
  * @param exts A pointer to the vector of placements that extend off of the players move,
  *      as calculated by the extend() method
@@ -276,9 +251,12 @@ bool game::validate(placement origMove, vector<placement> *exts) {
     }
     // look up every extension in the dictionary
     for (auto move : *exts) {
-        if (!dictCheck(move.word)) {
+        if (!dictionary.containsWord(move.word)) {
             return false;
         }
+//        if (!dictCheck(move.word)) {
+//            return false;
+//        }
     }
 
     // Replacing wildcards in extended words for calcScore
