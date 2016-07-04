@@ -13,7 +13,7 @@ placement PlayerManager::getMove(player currPlayer) {
         cout << "AI Tray: " + currPlayer.tray + "\n";
         placement move = theAI->getMove(currPlayer.tray);
         cout << "AI start loc: " << move.loc << "\nAI dir: " << move.dir << "\nAI word: " << move.word << "\n\n";
-        return theAI->getMove(currPlayer.tray);
+        return move;
     } else {
         return promptMove(currPlayer.tray);
     }

@@ -129,59 +129,91 @@ void game::init(vector<bool> playerType) {
  * Calculates all char sequences that intersect with a given move. Will extend char sequences off of every
  * inputted character until a blank or the edge of the board is found.
  */
+//vector<placement> game::extend(placement move) {
+//    vector<placement> result;
+//
+//    //input direction extension
+//    string horz_ext;
+//    horz_ext += move.word[0];
+//    int curr_Loc = TRANSPOSE(move.loc, move.dir) - 1;
+//    int return_loc = move.loc;
+//    // valid locations are within or equal to lo and hi
+//    int lo_obds = TRANSPOSE(move.loc, move.dir) / 15 * 15;
+//    int hi_obds = lo_obds + 14;
+//    while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+//        horz_ext = gameBoard.get(curr_Loc, move.dir) + horz_ext;
+//        return_loc = TRANSPOSE(curr_Loc, move.dir);
+//        curr_Loc--;
+//    }
+//    curr_Loc = TRANSPOSE(move.loc, move.dir) + 1;
+//    int i = 1;
+//    while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
+//        if (gameBoard.get(curr_Loc, move.dir) == ' ' && move.word[i] != ' ') {
+//            horz_ext = horz_ext + move.word[i];
+//        } else {
+//            horz_ext = horz_ext + gameBoard.get(curr_Loc, move.dir);
+//        }
+//        i++;
+//        curr_Loc++;
+//    }
+//    if (horz_ext.length() > 1) {
+//        result.push_back(placement{return_loc, move.dir, horz_ext});
+//    }
+//    //For each letter, extend in cross direction
+//    for(i = 0; i < move.word.length(); i++) {
+//        if (move.word[i] != '_') {
+//            string vert_ext;
+//            vert_ext += move.word[i];
+//            curr_Loc = TRANSPOSE(move.loc, move.dir) + i - 15;
+//            return_loc = TRANSPOSE(move.loc, move.dir);
+//            lo_obds = curr_Loc % 15;
+//            hi_obds = lo_obds + 210; // index of start of last row
+//            while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+//                vert_ext = gameBoard.get(curr_Loc, move.dir) + vert_ext;
+//                return_loc = TRANSPOSE(curr_Loc, move.dir);
+//                curr_Loc -= 15;
+//            }
+//
+//            curr_Loc = TRANSPOSE(move.loc, move.dir) + i + 15;
+//            while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
+//                vert_ext = vert_ext + gameBoard.get(curr_Loc, move.dir);
+//                curr_Loc += 15;
+//            }
+//            if (vert_ext.length() > 1) {
+//                result.push_back(placement{return_loc, !move.dir, vert_ext});
+//            }
+//        }
+//    }
+//    return result;
+//}
+
 vector<placement> game::extend(placement move) {
     vector<placement> result;
-
-    //input direction extension
-    string horz_ext;
-    horz_ext += move.word[0];
-    int curr_Loc = TRANSPOSE(move.loc, move.dir) - 1;
-    int return_loc = move.loc;
-    // valid locations are within or equal to lo and hi
-    int lo_obds = TRANSPOSE(move.loc, move.dir) / 15 * 15;
-    int hi_obds = lo_obds + 14;
-    while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-        horz_ext = gameBoard.get(curr_Loc, move.dir) + horz_ext;
-        return_loc = TRANSPOSE(curr_Loc, move.dir);
-        curr_Loc--;
-    }
-    curr_Loc = TRANSPOSE(move.loc, move.dir) + 1;
-    int i = 1;
-    while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
-        if (gameBoard.get(curr_Loc, move.dir) == ' ' && move.word[i] != ' ') {
-            horz_ext = horz_ext + move.word[i];
-        } else {
-            horz_ext = horz_ext + gameBoard.get(curr_Loc, move.dir);
+    // extend input word
+    placement ext_move;
+    string ext_lhs;
+    string ext_rhs;
+    ext_move.dir = move.dir;
+    ext_lhs = gameBoard.get_adj_string(TRANSPOSE(move.loc, move.dir), move.dir, 'w');
+    ext_rhs = gameBoard.get_adj_string((int) (TRANSPOSE(move.loc, move.dir) + move.word.size() - 1), move.dir, 'e');
+    ext_move.loc = (int) TRANSPOSE(TRANSPOSE(move.loc, move.dir) - ext_lhs.size(), move.dir);
+    string word = move.word;
+    for (int i = 0; i < (int) (word.length()); i++) {
+        if (word[i] == '_') {
+            word[i] = gameBoard.get(TRANSPOSE(move.loc, move.dir) + i, move.dir);
         }
-        i++;
-        curr_Loc++;
     }
-    if (horz_ext.length() > 1) {
-        result.push_back(placement{return_loc, move.dir, horz_ext});
-    }
-    //For each letter, extend in cross direction
-    for(i = 0; i < move.word.length(); i++) {
-        if (move.word[i] != '_') {
-            string vert_ext;
-            vert_ext += move.word[i];
-            curr_Loc = TRANSPOSE(move.loc, move.dir) + i - 15;
-            return_loc = TRANSPOSE(move.loc, move.dir);
-            lo_obds = curr_Loc % 15;
-            hi_obds = lo_obds + 210; // index of start of last row
-            while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-                vert_ext = gameBoard.get(curr_Loc, move.dir) + vert_ext;
-                return_loc = TRANSPOSE(curr_Loc, move.dir);
-                curr_Loc -= 15;
-            }
-
-            curr_Loc = TRANSPOSE(move.loc, move.dir) + i + 15;
-            while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-                vert_ext = vert_ext + gameBoard.get(curr_Loc, move.dir);
-                curr_Loc += 15;
-            }
-            if (vert_ext.length() > 1) {
-                result.push_back(placement{return_loc, !move.dir, vert_ext});
-            }
+    ext_move.word = ext_lhs + word + ext_rhs;
+    result.push_back(ext_move);
+    // compute cross checks
+    for (int i = 0; i < (int) (word.length()); i++) {
+        ext_move.dir = !move.dir;
+        ext_lhs = gameBoard.get_adj_string(TRANSPOSE(move.loc, move.dir) + i, move.dir, 'n');
+        ext_rhs = gameBoard.get_adj_string(TRANSPOSE(move.loc, move.dir) + i, move.dir, 's');
+        ext_move.loc = (int) (TRANSPOSE(TRANSPOSE(TRANSPOSE(move.loc, move.dir) + i, ext_move.dir) - ext_lhs.size(), ext_move.dir));
+        ext_move.word = ext_lhs + word[i] + ext_rhs;
+        if ((ext_lhs.size() > 0 || ext_rhs.size() > 0) && move.word[i] != '_') {
+            result.push_back(ext_move);
         }
     }
     return result;
@@ -254,9 +286,6 @@ bool game::validate(placement origMove, vector<placement> *exts) {
         if (!dictionary.containsWord(move.word)) {
             return false;
         }
-//        if (!dictCheck(move.word)) {
-//            return false;
-//        }
     }
 
     // Replacing wildcards in extended words for calcScore
