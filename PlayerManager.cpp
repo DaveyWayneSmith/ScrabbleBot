@@ -11,6 +11,8 @@ PlayerManager::PlayerManager(LetterRip* AI) {
 placement PlayerManager::getMove(player currPlayer) {
     if (currPlayer.ai) {
         cout << "AI Tray: " + currPlayer.tray + "\n";
+        placement move = theAI->getMove(currPlayer.tray);
+        cout << "AI start loc: " << move.loc << "\nAI dir: " << move.dir << "\nAI word: " << move.word << "\n\n";
         return theAI->getMove(currPlayer.tray);
     } else {
         return promptMove(currPlayer.tray);

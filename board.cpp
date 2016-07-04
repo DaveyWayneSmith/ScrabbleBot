@@ -330,5 +330,5 @@ bool board::checkBounds(placement test) {
     int norm_loc = TRANSPOSE(test.loc, test.dir);
     int lo_obds = norm_loc / 15 * 15;
     int hi_obds = lo_obds + 14;
-    return !(norm_loc + test.word.length() - 1 > hi_obds);
+    return norm_loc + test.word.length() - 1 <= hi_obds;
 }

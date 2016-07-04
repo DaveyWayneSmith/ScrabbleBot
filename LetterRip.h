@@ -13,14 +13,14 @@ using namespace std;
 
 class LetterRip {
     board* gameBoard;
-    DictTrie* dict; //TODO maybe make this a pointer later
+    DictTrie* dict;
     unsigned int metaBoard[BOARD_SIZE];
 public:
     LetterRip(board* theBoard, DictTrie* dictionary);
     placement getMove(string tray); // generate the ultimate move
     vector<int> getAnchorPoints();  // gets a vector containing all anchor points
-    void extendLeft(int idx, int trans, string word, string placement_word, string tray, placement* maxMove, int* maxScore);
-    void extendRight(int idx, int start_idx, int trans, string copy, string placement_word, string tray, placement* maxMove, int* maxScore);
+    void extendLeft(int idx, int trans, string word, string placement_word, string wild_loc, string tray, placement* maxMove, int* maxScore);
+    void extendRight(int idx, int start_idx, int trans, string copy, string placement_word, string wild_loc, string tray, placement* maxMove, int* maxScore);
 };
 
 

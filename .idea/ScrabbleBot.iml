@@ -13,7 +13,6 @@
       <sourceFolder url="file://$MODULE_DIR$/DictTrie.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/game.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/trie.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/pile.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/board.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/board.h" isTestSource="false" />

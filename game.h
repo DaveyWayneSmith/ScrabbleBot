@@ -20,8 +20,7 @@ class game {
     pile tilePile;
     LetterRip theAI = LetterRip(&gameBoard, &dictionary);
     PlayerManager manager = PlayerManager(&theAI);
-    // TODO This is public only for debugging
-    //vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
+    vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
 public:
     void start(); // start the game
     int play(placement move); // accept a placement from a player. returns the score if successful, -1 otherwise
@@ -29,7 +28,6 @@ public:
     game(); // default constructor
     game(vector<bool> playerType); // constructor that specifies number of players
     void init(vector<bool> playerType); // delegate constructor
-    vector<placement> extend(placement move); // computes a list of all words that extend off of a given placement
     bool validate(placement origMove, vector<placement> *exts); // validates a player move
 };
 
