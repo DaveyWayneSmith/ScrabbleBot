@@ -5,7 +5,7 @@
 #include "LetterRip.h"
 
 placement LetterRip::getMove(string tray) {
-    placement bestMove = placement{-1, HORZ, ""};
+    placement bestMove = placement{INVALID, HORZ, ""};
     int maxScore = -1;
     vector<int> anchors = getAnchorPoints();
     if (anchors.size() == 0) {
@@ -14,6 +14,9 @@ placement LetterRip::getMove(string tray) {
     for (auto i : anchors) {
         extendLeft(i, HORZ, "", "", "", tray, &bestMove, &maxScore);
         extendLeft(TRANSPOSE(i, VERT), VERT, "", "", "", tray, &bestMove, &maxScore);
+    }
+    if (bestMove.loc == INVALID) {
+        bestMove.loc = PASS;
     }
     return bestMove;
 }
@@ -91,10 +94,8 @@ void LetterRip::extendRight(int idx, int start_idx, int trans, string word, stri
             extendRight(idx + 1, start_idx, trans, copy_word, copy_placement, copy_wild_loc, tray, maxMove, maxScore);
         }
         if (dict->containsWord(copy_word)) { // we could stop here and have a valid move
-            auto end = copy_placement.size() - 1;
-            // copy_placement = copy_placement.at(end) == '_' ? copy_placement.erase(end) : copy_placement;
             placement test_placement = placement{TRANSPOSE(start_idx, trans), trans, copy_wild_loc};
-            int test_score = gameBoard->calcScore(test_placement);
+            int test_score = gameBoard->calcScore(test_placement, false);
             if (test_score > *maxScore) {
                 *maxScore = test_score;
                 *maxMove = placement{TRANSPOSE(start_idx, trans), trans, copy_placement};
@@ -125,8 +126,8 @@ void LetterRip::extendRight(int idx, int start_idx, int trans, string word, stri
                         string new_tray = tray.substr(0, i) + tray.substr(i + 1, tray.size() - 1);
                         extendRight(idx + 1, start_idx, trans, copy_word, copy_placement, copy_wild_loc, new_tray, maxMove, maxScore);
                     }
-                    if (dict->containsWord(copy_word)) { // we could stop here and have a valid move
-                        int test_score = gameBoard->calcScore(test_placement);
+                    if (dict->containsWord(copy_word + gameBoard->get_adj_string(idx, trans, 'e'))) { // we could stop here and have a valid move
+                        int test_score = gameBoard->calcScore(test_placement, false);
                         if (test_score > *maxScore) {
                             *maxScore = test_score;
                             *maxMove = placement{TRANSPOSE(start_idx, trans), trans, copy_placement};

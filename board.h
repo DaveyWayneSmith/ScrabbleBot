@@ -25,8 +25,8 @@ public:
     board(); // constructor
     void display(); //display the board
     int place(placement move); // place word on the board
-    int calcScore(placement move); // calculates the score of a placement
-    int calcScore(vector<placement> moves);
+    int calcScore(placement move, bool save_wild_loc); // calculates the score of a placement
+    int calcScore(vector<placement> moves, bool save_wild_loc);
     char get(int loc); // get a character off of the board
     char get(int loc, int trans); // get a character off the board; the second input specifies whether or not to transpose the given location
     bool isempty(); // returns whether or not there is anything on the board

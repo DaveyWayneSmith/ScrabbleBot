@@ -23,18 +23,33 @@
 void game::start() {
     int maxscore = 0;
     display();
+    int consecutivePassCount = 0;
     while (maxscore < SCORE_CAP) {
-        for (auto p:players) {
+        for (auto p : players) {
             if (p.score > maxscore) {
                 maxscore = p.score;
             }
         }
         int score = play(manager.getMove(players[currPlayer]));
-        if (score != -1) {
+        if (score >= 0) { // this is a normal move
             players[currPlayer].score += score;
+            consecutivePassCount = 0;
+        } else { // this is a special move
+            if (score == PASS) {
+                consecutivePassCount++;
+            } else if (score == SWAP) {
+                consecutivePassCount = 0;
+            } else if (score == INVALID) {
+                cout << "That move was invalid! You're turn has been skipped!\n";
+                consecutivePassCount = 0;
+            }
         }
         currPlayer = ++currPlayer % numPlayers;
         display();
+        if (consecutivePassCount == 2) {
+            cout << "Both players skipped in a row. Ending game...\n";
+            break;
+        }
     }
 }
 
@@ -49,26 +64,55 @@ void game::start() {
  * Returns the score of a valid move, -1 if not valid
  */
 int game::play(placement move) {
-    int score = 0;
-    vector<placement> ext = extend(move);
-    if (!validate(move, &ext)) return -1;
-    score = gameBoard.calcScore(ext);
-    gameBoard.place(move);
-
-    // replace used characters
-    string tray = players[currPlayer].tray;
-    int idx;
-    for (auto c : move.word) {
-        if (c == '_') { // if this is an intersection, then continue
-            continue;
-        } else if (tray.find(c) == std::string::npos) { // we need to replace a wildcard
-            idx = (int) tray.find('*');
-        } else {
-            idx = (int) tray.find(c);
+    int result = 0;
+    if (move.loc == PASS) {
+        return PASS;
+    } else if (move.loc == INVALID) {
+        return INVALID;
+    } else if (move.loc == SWAP) {
+        result = SWAP;
+        string tray = players[currPlayer].tray;
+        int idx;
+        string newchars;
+        vector<int> locs;
+        for (auto c : move.word) {
+            idx = tray.find(c);
+            if (idx == std::string::npos) {
+                cout << "The letter " << c << " was not found in your tray.\n";
+                return INVALID;
+            } else {
+                newchars.push_back(tilePile.draw()); // draw the new tile
+                locs.push_back(idx); // keep track of where it needs to go
+            }
         }
-        players[currPlayer].tray[idx] = tilePile.draw();
+        for (auto loc : locs) {
+            tilePile.replace(tray[loc]); // replace the old tile
+            tray[loc] = newchars[0]; // put the new tile in the tray
+            newchars.erase(0); // remove the new tile from the list of new tiles
+        }
+    } else {
+        vector<placement> ext = extend(move);
+        if (!validate(move, &ext)) {
+            return INVALID;
+        }
+        result = gameBoard.calcScore(ext, true);
+        gameBoard.place(move);
+
+        // replace used characters
+        string tray = players[currPlayer].tray;
+        int idx;
+        for (auto c : move.word) {
+            if (c == '_') { // if this is an intersection, then continue
+                continue;
+            } else if (tray.find(c) == std::string::npos) { // we need to replace a wildcard
+                idx = (int) tray.find('*');
+            } else {
+                idx = (int) tray.find(c);
+            }
+            players[currPlayer].tray[idx] = tilePile.draw();
+        }
     }
-    return score;
+    return result;
 }
 
 /*
@@ -129,64 +173,6 @@ void game::init(vector<bool> playerType) {
  * Calculates all char sequences that intersect with a given move. Will extend char sequences off of every
  * inputted character until a blank or the edge of the board is found.
  */
-//vector<placement> game::extend(placement move) {
-//    vector<placement> result;
-//
-//    //input direction extension
-//    string horz_ext;
-//    horz_ext += move.word[0];
-//    int curr_Loc = TRANSPOSE(move.loc, move.dir) - 1;
-//    int return_loc = move.loc;
-//    // valid locations are within or equal to lo and hi
-//    int lo_obds = TRANSPOSE(move.loc, move.dir) / 15 * 15;
-//    int hi_obds = lo_obds + 14;
-//    while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-//        horz_ext = gameBoard.get(curr_Loc, move.dir) + horz_ext;
-//        return_loc = TRANSPOSE(curr_Loc, move.dir);
-//        curr_Loc--;
-//    }
-//    curr_Loc = TRANSPOSE(move.loc, move.dir) + 1;
-//    int i = 1;
-//    while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ' || i < move.word.length()) {
-//        if (gameBoard.get(curr_Loc, move.dir) == ' ' && move.word[i] != ' ') {
-//            horz_ext = horz_ext + move.word[i];
-//        } else {
-//            horz_ext = horz_ext + gameBoard.get(curr_Loc, move.dir);
-//        }
-//        i++;
-//        curr_Loc++;
-//    }
-//    if (horz_ext.length() > 1) {
-//        result.push_back(placement{return_loc, move.dir, horz_ext});
-//    }
-//    //For each letter, extend in cross direction
-//    for(i = 0; i < move.word.length(); i++) {
-//        if (move.word[i] != '_') {
-//            string vert_ext;
-//            vert_ext += move.word[i];
-//            curr_Loc = TRANSPOSE(move.loc, move.dir) + i - 15;
-//            return_loc = TRANSPOSE(move.loc, move.dir);
-//            lo_obds = curr_Loc % 15;
-//            hi_obds = lo_obds + 210; // index of start of last row
-//            while (curr_Loc >= lo_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-//                vert_ext = gameBoard.get(curr_Loc, move.dir) + vert_ext;
-//                return_loc = TRANSPOSE(curr_Loc, move.dir);
-//                curr_Loc -= 15;
-//            }
-//
-//            curr_Loc = TRANSPOSE(move.loc, move.dir) + i + 15;
-//            while (curr_Loc <= hi_obds && gameBoard.get(curr_Loc, move.dir) != ' ') {
-//                vert_ext = vert_ext + gameBoard.get(curr_Loc, move.dir);
-//                curr_Loc += 15;
-//            }
-//            if (vert_ext.length() > 1) {
-//                result.push_back(placement{return_loc, !move.dir, vert_ext});
-//            }
-//        }
-//    }
-//    return result;
-//}
-
 vector<placement> game::extend(placement move) {
     vector<placement> result;
     // extend input word

@@ -49,9 +49,6 @@ pile::pile() {
  * Decrements the frequency of the selected character
  */
 char pile::draw() {
-    if (pileMap.empty()) {
-        return ' ';
-    }
     // generate weighted keyset
     vector<char> keyset;
     for (auto it : pileMap) {
@@ -59,14 +56,18 @@ char pile::draw() {
             keyset.push_back(it.first);
         }
     }
+    if (keyset.empty()) { // if everything is zero
+        return ' ';
+    }
     int idx = (int) (rand() % keyset.size());
     char ch = keyset[idx];
-    int freq = pileMap.at(ch);
-    if (freq <= 1) {
-        pileMap.erase(ch);
-    } else {
-        pileMap[ch]--;
-    }
+//    int freq = pileMap.at(ch);
+    pileMap[ch]--;
+//    if (freq <= 1) {
+//        pileMap.erase(ch);
+//    } else {
+//        pileMap[ch]--;
+//    }
     return ch;
 }
 

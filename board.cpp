@@ -182,17 +182,21 @@ int board::place(placement move) {
  *
  * Calculates the raw score of a single placement. Accounts for multipliers and wildcard tiles.
  */
-int board::calcScore(placement move) {
+int board::calcScore(placement move, bool save_wild_loc) {
     int norm_loc = TRANSPOSE(move.loc, move.dir);
     string word = move.word;
     short multiplier = 1;
     int score = 0;
     char currChar;
+    int numLetts = 0;
     for (int i = 0; i < word.length(); i++) {
         currChar = word[i];
+        if (currChar != '_' && boardArr[TRANSPOSE(norm_loc + i, move.dir)] == ' ') { // this is a new character
+            numLetts++; // add it to the count of letters for this move
+        }
         if (currChar == '_') {
             currChar = boardArr[TRANSPOSE(norm_loc + i, move.dir)];
-        } else if (currChar == '*') {
+        } else if (save_wild_loc && currChar == '*') {
             wild_loc.push_back(TRANSPOSE(norm_loc + i, move.dir));
         }
         if (currChar != '*' && count(wild_loc.begin(), wild_loc.end(), TRANSPOSE(norm_loc + i, move.dir)) != 0) {
@@ -218,17 +222,17 @@ int board::calcScore(placement move) {
         }
     }
     score *= multiplier;
-    return score;
+    return score + (numLetts >= 7 ? 50 : 0);
 }
 
 /*
  * @param moves A vector of placements
  * @return the sum of the score of all placements
  */
-int board::calcScore(vector<placement> moves) {
+int board::calcScore(vector<placement> moves, bool save_wild_loc) {
     int score = 0;
     for (auto move : moves) {
-        score += calcScore(move);
+        score += calcScore(move, save_wild_loc);
     }
     return score;
 }

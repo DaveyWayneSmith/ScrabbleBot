@@ -21,7 +21,11 @@ static const int BOARD_SIDE_LEN = 15;
 static const int CENTER = 112;
 static const int TRAY_SIZE = 7;
 
-static const int SCORE_CAP = 300;
+static const int SCORE_CAP = 500;
+
+static const int INVALID = -1;
+static const int PASS = -2;
+static const int SWAP = -3;
 
 static const string ED_DICT_FILE = "C:\\Users\\Edward\\Documents\\ScrabbleBot\\dictionary.txt";
 static const string DAVEY_DICT_FILE = "/Users/daveysmith/ClionProjects/ScrabbleBot/dictionary.txt";
