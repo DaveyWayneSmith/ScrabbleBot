@@ -115,6 +115,102 @@ ScrabbleBot/fast:
 	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/build
 .PHONY : ScrabbleBot/fast
 
+DictTrie.o: DictTrie.cpp.o
+.PHONY : DictTrie.o
+
+# target to build an object file
+DictTrie.cpp.o:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o
+.PHONY : DictTrie.cpp.o
+
+DictTrie.i: DictTrie.cpp.i
+.PHONY : DictTrie.i
+
+# target to preprocess a source file
+DictTrie.cpp.i:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.i
+.PHONY : DictTrie.cpp.i
+
+DictTrie.s: DictTrie.cpp.s
+.PHONY : DictTrie.s
+
+# target to generate assembly for a file
+DictTrie.cpp.s:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.s
+.PHONY : DictTrie.cpp.s
+
+LetterRip.o: LetterRip.cpp.o
+.PHONY : LetterRip.o
+
+# target to build an object file
+LetterRip.cpp.o:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o
+.PHONY : LetterRip.cpp.o
+
+LetterRip.i: LetterRip.cpp.i
+.PHONY : LetterRip.i
+
+# target to preprocess a source file
+LetterRip.cpp.i:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.i
+.PHONY : LetterRip.cpp.i
+
+LetterRip.s: LetterRip.cpp.s
+.PHONY : LetterRip.s
+
+# target to generate assembly for a file
+LetterRip.cpp.s:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.s
+.PHONY : LetterRip.cpp.s
+
+PlayerManager.o: PlayerManager.cpp.o
+.PHONY : PlayerManager.o
+
+# target to build an object file
+PlayerManager.cpp.o:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.o
+.PHONY : PlayerManager.cpp.o
+
+PlayerManager.i: PlayerManager.cpp.i
+.PHONY : PlayerManager.i
+
+# target to preprocess a source file
+PlayerManager.cpp.i:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.i
+.PHONY : PlayerManager.cpp.i
+
+PlayerManager.s: PlayerManager.cpp.s
+.PHONY : PlayerManager.s
+
+# target to generate assembly for a file
+PlayerManager.cpp.s:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.s
+.PHONY : PlayerManager.cpp.s
+
+TrieNode.o: TrieNode.cpp.o
+.PHONY : TrieNode.o
+
+# target to build an object file
+TrieNode.cpp.o:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o
+.PHONY : TrieNode.cpp.o
+
+TrieNode.i: TrieNode.cpp.i
+.PHONY : TrieNode.i
+
+# target to preprocess a source file
+TrieNode.cpp.i:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.i
+.PHONY : TrieNode.cpp.i
+
+TrieNode.s: TrieNode.cpp.s
+.PHONY : TrieNode.s
+
+# target to generate assembly for a file
+TrieNode.cpp.s:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.s
+.PHONY : TrieNode.cpp.s
+
 board.o: board.cpp.o
 .PHONY : board.o
 
@@ -220,6 +316,18 @@ help:
 	@echo "... ScrabbleBot"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... DictTrie.o"
+	@echo "... DictTrie.i"
+	@echo "... DictTrie.s"
+	@echo "... LetterRip.o"
+	@echo "... LetterRip.i"
+	@echo "... LetterRip.s"
+	@echo "... PlayerManager.o"
+	@echo "... PlayerManager.i"
+	@echo "... PlayerManager.s"
+	@echo "... TrieNode.o"
+	@echo "... TrieNode.i"
+	@echo "... TrieNode.s"
 	@echo "... board.o"
 	@echo "... board.i"
 	@echo "... board.s"

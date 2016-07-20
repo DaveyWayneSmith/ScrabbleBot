@@ -3,6 +3,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/ScrabbleBot.dir/pile.cpp.o"
   "CMakeFiles/ScrabbleBot.dir/game.cpp.o"
   "CMakeFiles/ScrabbleBot.dir/board.cpp.o"
+  "CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.o"
+  "CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o"
+  "CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o"
+  "CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o"
   "ScrabbleBot.pdb"
   "ScrabbleBot"
 )

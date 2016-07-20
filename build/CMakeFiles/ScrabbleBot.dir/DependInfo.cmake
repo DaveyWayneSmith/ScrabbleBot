@@ -4,6 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/pi/ScrabbleBot/DictTrie.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o"
+  "/home/pi/ScrabbleBot/LetterRip.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o"
+  "/home/pi/ScrabbleBot/PlayerManager.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.o"
+  "/home/pi/ScrabbleBot/TrieNode.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o"
   "/home/pi/ScrabbleBot/board.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/board.cpp.o"
   "/home/pi/ScrabbleBot/game.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/game.cpp.o"
   "/home/pi/ScrabbleBot/main.cpp" "/home/pi/ScrabbleBot/build/CMakeFiles/ScrabbleBot.dir/main.cpp.o"

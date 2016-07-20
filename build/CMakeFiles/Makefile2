@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/pi/ScrabbleBot/build
 CMakeFiles/ScrabbleBot.dir/all:
 	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/depend
 	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/ScrabbleBot/build/CMakeFiles  1 2 3 4
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/ScrabbleBot/build/CMakeFiles  1 2 3 4 5 6 7 8
 	@echo "Built target ScrabbleBot"
 .PHONY : CMakeFiles/ScrabbleBot.dir/all
 
@@ -69,7 +69,7 @@ all: CMakeFiles/ScrabbleBot.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/ScrabbleBot.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/ScrabbleBot/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/ScrabbleBot/build/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ScrabbleBot.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/ScrabbleBot/build/CMakeFiles 0
 .PHONY : CMakeFiles/ScrabbleBot.dir/rule

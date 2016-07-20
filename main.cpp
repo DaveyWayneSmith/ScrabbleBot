@@ -1,11 +1,25 @@
 #include <iostream>
 #include "game.h"
+#include <stdio.h>
+#include <wiringPi.h>
+#define	LED 0
 
 using namespace std;
 
 int main(int argc, char** argv) {
-    if (argc > 1) {
+    	if (argc > 1) {
         // testing code here
+	printf ("Raspberry Pi blink\n") ;
+
+  	wiringPiSetup () ;
+  	pinMode (LED, OUTPUT) ;
+
+  	for (;;) {
+    		digitalWrite (LED, HIGH) ;	// On
+    		delay (500) ;		// mS
+    		digitalWrite (LED, LOW) ;	// Off
+    		delay (500) ;
+  	}
         board testBoard = board();
         DictTrie dict = DictTrie();
         LetterRip testAI = LetterRip(&testBoard, &dict);
