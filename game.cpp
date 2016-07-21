@@ -121,7 +121,7 @@ int game::play(placement move) {
 void game::display() {
     gameBoard.display();
     for (int i = 0; i < numPlayers; i++) {
-        fprintf(stdout, "Player %d Score: %d\n", i + 1, players[i].score, i + 1);
+        fprintf(stdout, "Player %d Score: %d\n", i + 1, players[i].score);
     }
     fprintf(stdout, "\nIt's currently Player %d's turn\n", currPlayer + 1);
 }
