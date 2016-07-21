@@ -9,6 +9,7 @@ using namespace std;
 #include <iostream>
 #include "LetterRip.h"
 #include "definitions.h"
+#include "ArmController.h"
 
 class PlayerManager {
 public:
@@ -17,6 +18,7 @@ public:
 
 private:
     LetterRip* theAI;
+    ArmController controller = ArmController();
     placement promptMove(string tray); // go though terminal prompts to get a human move
 };
 
