@@ -18,6 +18,9 @@ DictTrie::DictTrie() {
     if (!file) {
         file.open(ED_DICT_FILE.c_str());
     }
+    if (!file) {
+        file.open(ED_VM_DICT_FILE.c_str());
+    }
     string curWord;
     while (getline(file, curWord)) {
         curWord.erase(std::remove(curWord.begin(), curWord.end(), '\r'), curWord.end());
