@@ -9,16 +9,13 @@ using namespace std;
 #include <iostream>
 #include "LetterRip.h"
 #include "definitions.h"
-//#include "ArmController.h"
 
 class PlayerManager {
 public:
     PlayerManager(LetterRip* AI); // constructor
     placement getMove(player currPlayer); //get a move from the player
-
 private:
     LetterRip* theAI;
-//    ArmController controller = ArmController();
     placement promptMove(string tray); // go though terminal prompts to get a human move
 };
 
