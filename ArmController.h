@@ -43,7 +43,7 @@ private:
 
     //time constants
     static const int TILE_X_POS_WIDTH = 7600 / BOARD_SIDE_LEN;
-    static const int TILE_X_NEG_WIDTH = 7850 / BOARD_SIDE_LEN;
+    static const int TILE_X_NEG_WIDTH = 7900 / BOARD_SIDE_LEN;
     static const int TILE_Y_POS_WIDTH = 3050 / BOARD_SIDE_LEN;
     static const int TILE_Y_NEG_WIDTH = 2700 / BOARD_SIDE_LEN;
     static const int VERT_DIST = 500;
