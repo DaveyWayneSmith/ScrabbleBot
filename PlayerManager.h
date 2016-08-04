@@ -15,7 +15,7 @@ class PlayerManager {
 public:
     PlayerManager(LetterRip* AI); // constructor
     placement getMove(player currPlayer); //get a move from the player
-
+    void placeMove(string tray, placement move); //place a move on the board
 private:
     LetterRip* theAI;
     ArmController controller = ArmController();

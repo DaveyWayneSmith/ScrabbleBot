@@ -9,56 +9,66 @@ using namespace std;
 #include <string>
 #include "definitions.h"
 
-typedef struct cartPair {
+typedef struct point {
     int x;
     int y;
-} cartPair;
+} point;
 
+/*
+ * Notes on dealing with hardware:
+ * Arm is assumed to be in home position with arm in raised position and the vacuum off when this class is initialized.
+ * If anything goes wrong with the mechanics of the arm, there is little change of recovery
+ * If the design of any of the mechanics is changed, the time constants will need to be changed
+ * If the wiring of the motors/vacuum is changed, the pin numbers will need to be changed
+ *
+ * All methods that control physical components are bookended by a pause of PAUSE_TIME (in ms)
+ */
 class ArmController {
 public:
     ArmController();
     void set(string tray, placement move);
+
+    // TODO these methods only public for debugging
+    point trayIdx2point(int idx); // convert a tray string index into an [x, y] point
+    point boardIdx2point(int idx); // convert a board index to an [x, y] point
+    void moveTile(bool dir); // move a tile up or down
+    void moveArm(point start, point stop);
+    void vacSwitch(bool which); // turn the vacuum on or off
 private:
-    static const int wait = 50; // number of ms to wait between each arm action
-    static const bool UP = false;
-    static const bool DN = true;
+    static const bool UP = true;
+    static const bool DN = false;
 
+    static const bool ON = true;
+    static const bool OFF = false;
+
+    //time constants
     static const int TILE_X_WIDTH = 7200 / 15;
-    static const int X_NEG_DIFF = 70;
-    static const int TILE_Y_WIDTH = 3000 / 15;
-    static const int Y_NEG_DIFF = -550;
+    static const int TILE_Y_WIDTH = 2700 / 15;
     static const int VERT_DIST = 400;
+    static const int PAUSE_TIME = 100;
 
-    static const int MOTOR_X_ENPIN = 4;
-    static const int MOTOR_X_0PIN = 13;
-    static const int MOTOR_X_1PIN = 16;
+    // pin numbers
+    static const int XE = 4; // motor x enable pin
+    static const int X0 = 13; // motor x 0 pin
+    static const int X1 = 16; // motor x 1 pin
 
-    static const int MOTOR_Y_ENPIN = 5;
-    static const int MOTOR_Y_0PIN = 17;
-    static const int MOTOR_Y_1PIN = 18;
+    static const int YE = 5; // motor y enable pin
+    static const int Y0 = 17; // motor y 0 pin
+    static const int Y1 = 18; // motor y 1 pin
 
-    static const int MOTOR_Z_ENPIN = 6;
-    static const int MOTOR_Z_0PIN = 22;
-    static const int MOTOR_Z_1PIN = 23;
+    static const int ZE = 6; // motor z enable pin
+    static const int Z0 = 22; // motor z 0 pin
+    static const int Z1 = 23; // motor z 1 pin
 
-    static const int VAC_ENPIN = 12;
-    static const int VAC_0PIN = 24;
-    static const int VAC_1PIN = 25;
+    static const int VE = 12; // vacuum enable pin
+    static const int V0 = 24; // vacuum 0 pin
+    static const int V1 = 25; // vacuum 1 pin
 
-    cartPair home = cartPair{0, 0}; // the home position of the arm
-    cartPair curr = home;
-    bool vertLoc = UP;
-    bool vacOn = false;
+    point home = point{0, 0}; // the home position of the arm from which all offsets will be calculated (should be {0, 0})
+    point curr = home; // arm is assumed to be in home position when initialized
 
-    cartPair trayAnchor = cartPair{100, 50}; // the point from which tray offsets will be calculated
-    cartPair boardAnchor = cartPair{200, 100}; // the point from which all board offsets will be calculated
-
-    cartPair trayIdx2point(int idx); // convert a tray string index into an [x, y] cartPair
-    cartPair boardIdx2point(int idx); // convert a board index to an [x, y] cartPair
-    cartPair distance(cartPair start, cartPair end); // compute the x and y distance between two points
-    void moveArm(cartPair start, cartPair stop);
-    void toggleVert();
-    void toggleVac();
+    point trayAnchor = point{0, 0}; // the point (in ms) from which tray offsets will be calculated
+    point boardAnchor = point{0, 0}; // the point (in ms) from which all board offsets will be calculated
 };
 
 

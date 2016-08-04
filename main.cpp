@@ -5,7 +5,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
     if (argc > 1) {
-	
+	    ArmController controller = ArmController();
+        controller.moveArm(point{0, 0}, point{0, 5});
     }
     int num_players = 0;
     do {
