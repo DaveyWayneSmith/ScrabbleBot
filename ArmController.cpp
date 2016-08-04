@@ -83,21 +83,21 @@ void ArmController::moveArm(point start, point stop) {
     if (deltaX > 0) {
         digitalWrite(X0, HIGH);
         digitalWrite(X1, LOW);
-	x_width = TILE_X_POS_WIDTH;
+	    x_width = TILE_X_POS_WIDTH;
     } else {
         digitalWrite(X0, LOW);
         digitalWrite(X1, HIGH);
-	x_width = TILE_X_NEG_WIDTH;
+	    x_width = TILE_X_NEG_WIDTH;
     }
 
     if (deltaY > 0) {
         digitalWrite(Y0, LOW);
         digitalWrite(Y1, HIGH);
-	y_width = TILE_Y_POS_WIDTH;
+	    y_width = TILE_Y_POS_WIDTH;
     } else {
         digitalWrite(Y0, HIGH);
         digitalWrite(Y1, LOW);
-	y_width = TILE_Y_NEG_WIDTH;
+	    y_width = TILE_Y_NEG_WIDTH;
     }
     unsigned int absX = (unsigned int) abs(deltaX);
     unsigned int absY = (unsigned int) abs(deltaY);
@@ -133,4 +133,20 @@ point ArmController::boardIdx2point(int idx) {
  */
 point ArmController::trayIdx2point(int idx) {
     return point{trayAnchor.x, trayAnchor.y + idx};
+}
+
+void ArmController::resetX() {
+    digitalWrite(X0, LOW);
+    digitalWrite(X1, HIGH);
+    digitalWrite(XE, HIGH);
+    delay(X_RESET_TIME);
+    digitalWrite(XE, LOW);
+}
+
+void ArmController::resetY() {
+    digitalWrite(Y0, HIGH);
+    digitalWrite(Y1, LOW);
+    digitalWrite(XE, HIGH);
+    delay(Y_RESET_TIME);
+    digitalWrite(XE, LOW);
 }

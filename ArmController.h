@@ -34,6 +34,8 @@ public:
     void moveTile(bool dir); // move a tile up or down
     void moveArm(point start, point stop);
     void vacSwitch(bool which); // turn the vacuum on or off
+    void resetX(); // assumes arm is at {0, 0} and tries to go a little further in x direction
+    void resetY(); // assumes arm is at {0, 0} and tries to go a little further in y direction
 private:
     static const bool UP = true;
     static const bool DN = false;
@@ -46,6 +48,8 @@ private:
     static const int TILE_X_NEG_WIDTH = 7900 / BOARD_SIDE_LEN;
     static const int TILE_Y_POS_WIDTH = 3050 / BOARD_SIDE_LEN;
     static const int TILE_Y_NEG_WIDTH = 2700 / BOARD_SIDE_LEN;
+    static const int X_RESET_TIME = 200;
+    static const int Y_RESET_TIME = 200;
     static const int VERT_DIST = 500;
     static const int PAUSE_TIME = 100;
 

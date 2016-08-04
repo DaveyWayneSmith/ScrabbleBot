@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
 	cout << "medium test\n";
 	for (int i = 0; i < 10; i++) {
 		cout << "Run #: " << i << "\n";
+        controller.resetX();
+        controller.resetY();
 		controller.moveTile(UP);
 		controller.moveArm(point{0, 0}, point{17, 15});
 		controller.moveTile(DN);
