@@ -116,6 +116,8 @@ void ArmController::vacSwitch(bool which) {
         digitalWrite(VE, HIGH);
     } else {
         digitalWrite(VE, LOW);
+
+
     }
     delay(PAUSE_TIME);
 }
