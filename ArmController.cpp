@@ -78,34 +78,28 @@ void ArmController::moveTile(bool dir) {
 void ArmController::moveArm(point start, point stop) {
     int deltaX = stop.x - start.x;
     int deltaY = stop.y - start.y;
-    int x_width;
-    int y_width;
     if (deltaX > 0) {
         digitalWrite(X0, HIGH);
         digitalWrite(X1, LOW);
-        x_width = TILE_X_POS_WIDTH;
     } else {
         digitalWrite(X0, LOW);
         digitalWrite(X1, HIGH);
-        x_width = TILE_X_NEG_WIDTH;
     }
 
     if (deltaY > 0) {
         digitalWrite(Y0, LOW);
         digitalWrite(Y1, HIGH);
-        y_width = TILE_Y_POS_WIDTH;
     } else {
         digitalWrite(Y0, HIGH);
         digitalWrite(Y1, LOW);
-        y_width = TILE_Y_NEG_WIDTH;
     }
     unsigned int absX = (unsigned int) abs(deltaX);
     unsigned int absY = (unsigned int) abs(deltaY);
     digitalWrite(XE, HIGH);
-    delay(absX * x_width);
+    delay(absX * TILE_X_WIDTH);
     digitalWrite(XE, LOW);
     digitalWrite(YE, HIGH);
-    delay(absY * y_width);
+    delay(absY * TILE_Y_WIDTH);
     digitalWrite(YE, LOW);
     curr = stop;
 }
@@ -123,14 +117,14 @@ void ArmController::vacSwitch(bool which) {
 }
 
 point ArmController::boardIdx2point(int idx) {
-    int x = idx % BOARD_SIDE_LEN;
+    int x = idx % BOARD_SIDE_LEN + 2;
     int y = idx / BOARD_SIDE_LEN;
-    return point{boardAnchor.x + x * TILE_X_POS_WIDTH, boardAnchor.y + y * TILE_Y_POS_WIDTH};
+    return point{boardAnchor.x + x * TILE_X_WIDTH, boardAnchor.y + y * TILE_Y_WIDTH};
 }
 
 /*
  * Assumes that the letters are arranged vertically from 0 to 6 with trayAnchor pointing to the middle of tray[0]
  */
 point ArmController::trayIdx2point(int idx) {
-    return point{trayAnchor.x, trayAnchor.y + idx * TILE_Y_POS_WIDTH};
+    return point{trayAnchor.x, trayAnchor.y + idx * TILE_Y_WIDTH};
 }
