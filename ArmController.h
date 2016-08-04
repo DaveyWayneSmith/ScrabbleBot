@@ -42,8 +42,10 @@ private:
     static const bool OFF = false;
 
     //time constants
-    static const int TILE_X_WIDTH = 7600 / 15;
-    static const int TILE_Y_WIDTH = 2900 / 15;
+    static const int TILE_X_POS_WIDTH = 7600 / BOARD_SIDE_LEN;
+    static const int TILE_X_NEG_WIDTH = 8000 / BOARD_SIDE_LEN;
+    static const int TILE_Y_POS_WIDTH = 3000 / BOARD_SIDE_LEN;
+    static const int TILE_Y_NEG_WIDTH = 2800 / BOARD_SIDE_LEN;
     static const int VERT_DIST = 500;
     static const int PAUSE_TIME = 100;
 
