@@ -63,9 +63,8 @@ void ArmController::moveTile(bool dir) {
 
     if (!dir) { // moving a tile down
         vacSwitch(OFF);
-        delay(300); // give 300 ms for vacuum pump to depressurize
     }
-    delay(PAUSE_TIME);
+    delay(300); // wait to suck up/release tile
 
     //go up
     digitalWrite(Z0, LOW);
@@ -97,10 +96,10 @@ void ArmController::moveArm(point start, point stop) {
     unsigned int absX = (unsigned int) abs(deltaX);
     unsigned int absY = (unsigned int) abs(deltaY);
     digitalWrite(XE, HIGH);
-    delay(absX);
+    delay(absX * TILE_X_WIDTH);
     digitalWrite(XE, LOW);
     digitalWrite(YE, HIGH);
-    delay(absY);
+    delay(absY * TILE_Y_WIDTH);
     digitalWrite(YE, LOW);
     curr = stop;
 }

@@ -42,9 +42,9 @@ private:
     static const bool OFF = false;
 
     //time constants
-    static const int TILE_X_WIDTH = 7200 / 15;
-    static const int TILE_Y_WIDTH = 2700 / 15;
-    static const int VERT_DIST = 400;
+    static const int TILE_X_WIDTH = 7600 / 15;
+    static const int TILE_Y_WIDTH = 2900 / 15;
+    static const int VERT_DIST = 500;
     static const int PAUSE_TIME = 100;
 
     // pin numbers

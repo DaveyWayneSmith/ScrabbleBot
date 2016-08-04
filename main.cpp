@@ -1,12 +1,43 @@
 #include <iostream>
 #include "game.h"
+#include <wiringPi.h>
 
 using namespace std;
 
 int main(int argc, char** argv) {
     if (argc > 1) {
-	    ArmController controller = ArmController();
-        controller.moveArm(point{0, 0}, point{0, 5});
+	bool UP = true;
+	bool DN = false;
+	ArmController controller = ArmController();
+	//cout << "basic test\n";
+	//controller.moveTile(UP);
+	//controller.moveArm(point{0, 0}, point{2, 5});
+	//controller.moveTile(DN);
+	//controller.moveArm(point{2, 5}, point{0, 0});
+
+	cout << "medium test\n";
+	for (int i = 0; i < 10; i++) {
+		cout << "Run #: " << i << "\n";
+		controller.moveTile(UP);
+		controller.moveArm(point{0, 0}, point{15, 15});
+		controller.moveTile(DN);
+		controller.moveArm(point{15, 15}, point{0, 0});
+		cout << "Safely exit now..." << flush;
+		delay(3000);
+		cout << "Cannot safely exit now\n";
+	}
+	// cout << "hard test\n";
+	// for (int i = 1; i < 14; i++) {
+	//	cout << "Run #: " << i << "\n";
+	//	controller.moveTile(UP);
+	//	controller.moveArm(point{0, 0}, point{i, i});
+	//	controller.moveTile(DN);
+	//	controller.moveArm(point{i, i}, point{0, 0});
+	//	cout << "Safely exit now";
+	//	delay(3000);
+	//	cout << "Cannot safely exit";
+	// }
+	return 0;
     }
     int num_players = 0;
     do {

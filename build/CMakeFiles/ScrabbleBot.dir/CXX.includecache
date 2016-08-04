@@ -20,16 +20,6 @@ string
 definitions.h
 /home/pi/ScrabbleBot/definitions.h
 
-/home/pi/ScrabbleBot/DictTrie.cpp
-fstream
--
-DictTrie.h
-/home/pi/ScrabbleBot/DictTrie.h
-definitions.h
-/home/pi/ScrabbleBot/definitions.h
-algorithm
--
-
 /home/pi/ScrabbleBot/DictTrie.h
 iostream
 -
@@ -39,10 +29,6 @@ bits/unique_ptr.h
 -
 TrieNode.h
 /home/pi/ScrabbleBot/TrieNode.h
-
-/home/pi/ScrabbleBot/LetterRip.cpp
-LetterRip.h
-/home/pi/ScrabbleBot/LetterRip.h
 
 /home/pi/ScrabbleBot/LetterRip.h
 string
@@ -73,14 +59,6 @@ vector
 -
 string
 -
-
-/home/pi/ScrabbleBot/board.cpp
-iostream
--
-algorithm
--
-board.h
-/home/pi/ScrabbleBot/board.h
 
 /home/pi/ScrabbleBot/board.h
 stdio.h
@@ -125,6 +103,8 @@ iostream
 -
 game.h
 /home/pi/ScrabbleBot/game.h
+wiringPi.h
+-
 
 /home/pi/ScrabbleBot/pile.h
 map
