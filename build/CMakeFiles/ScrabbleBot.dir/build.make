@@ -233,6 +233,29 @@ CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o.provides: CMakeFiles/ScrabbleBot.dir/T
 
 CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o.provides.build: CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o
 
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o: CMakeFiles/ScrabbleBot.dir/flags.make
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o: ../ArmController.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/pi/ScrabbleBot/build/CMakeFiles $(CMAKE_PROGRESS_9)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o -c /home/pi/ScrabbleBot/ArmController.cpp
+
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ScrabbleBot.dir/ArmController.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/pi/ScrabbleBot/ArmController.cpp > CMakeFiles/ScrabbleBot.dir/ArmController.cpp.i
+
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ScrabbleBot.dir/ArmController.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/pi/ScrabbleBot/ArmController.cpp -o CMakeFiles/ScrabbleBot.dir/ArmController.cpp.s
+
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.requires:
+.PHONY : CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.requires
+
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.provides: CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.provides.build
+.PHONY : CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.provides
+
+CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.provides.build: CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o
+
 # Object files for target ScrabbleBot
 ScrabbleBot_OBJECTS = \
 "CMakeFiles/ScrabbleBot.dir/main.cpp.o" \
@@ -242,7 +265,8 @@ ScrabbleBot_OBJECTS = \
 "CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.o" \
 "CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o" \
 "CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o" \
-"CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o"
+"CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o" \
+"CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o"
 
 # External object files for target ScrabbleBot
 ScrabbleBot_EXTERNAL_OBJECTS =
@@ -255,6 +279,7 @@ ScrabbleBot: CMakeFiles/ScrabbleBot.dir/PlayerManager.cpp.o
 ScrabbleBot: CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o
 ScrabbleBot: CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o
 ScrabbleBot: CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o
+ScrabbleBot: CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o
 ScrabbleBot: CMakeFiles/ScrabbleBot.dir/build.make
 ScrabbleBot: CMakeFiles/ScrabbleBot.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ScrabbleBot"
@@ -272,6 +297,7 @@ CMakeFiles/ScrabbleBot.dir/requires: CMakeFiles/ScrabbleBot.dir/PlayerManager.cp
 CMakeFiles/ScrabbleBot.dir/requires: CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o.requires
 CMakeFiles/ScrabbleBot.dir/requires: CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o.requires
 CMakeFiles/ScrabbleBot.dir/requires: CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o.requires
+CMakeFiles/ScrabbleBot.dir/requires: CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o.requires
 .PHONY : CMakeFiles/ScrabbleBot.dir/requires
 
 CMakeFiles/ScrabbleBot.dir/clean:

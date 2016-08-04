@@ -5,17 +5,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     if (argc > 1) {
-        board testBoard = board();
-        DictTrie dict = DictTrie();
-        LetterRip testAI = LetterRip(&testBoard, &dict);
-        testBoard.place(placement{24, HORZ, "CURULE"});
-        testBoard.place(placement{11, VERT, "ORCEIN"});
-        testBoard.display();
-        int val1 = testBoard.calcScore(placement{106, HORZ, "QWER__TYU"}, false);
-        int val2 = testBoard.calcScore(placement{121, HORZ, "Q_W_E_R_T_Y"}, false);
-        int val3 = testBoard.calcScore(placement{136, HORZ, "QWERTYU"}, false);
-        placement move = testAI.getMove("AX");
-        return 0;
+	
     }
     int num_players = 0;
     do {

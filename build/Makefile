@@ -115,6 +115,30 @@ ScrabbleBot/fast:
 	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/build
 .PHONY : ScrabbleBot/fast
 
+ArmController.o: ArmController.cpp.o
+.PHONY : ArmController.o
+
+# target to build an object file
+ArmController.cpp.o:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o
+.PHONY : ArmController.cpp.o
+
+ArmController.i: ArmController.cpp.i
+.PHONY : ArmController.i
+
+# target to preprocess a source file
+ArmController.cpp.i:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/ArmController.cpp.i
+.PHONY : ArmController.cpp.i
+
+ArmController.s: ArmController.cpp.s
+.PHONY : ArmController.s
+
+# target to generate assembly for a file
+ArmController.cpp.s:
+	$(MAKE) -f CMakeFiles/ScrabbleBot.dir/build.make CMakeFiles/ScrabbleBot.dir/ArmController.cpp.s
+.PHONY : ArmController.cpp.s
+
 DictTrie.o: DictTrie.cpp.o
 .PHONY : DictTrie.o
 
@@ -316,6 +340,9 @@ help:
 	@echo "... ScrabbleBot"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... ArmController.o"
+	@echo "... ArmController.i"
+	@echo "... ArmController.s"
 	@echo "... DictTrie.o"
 	@echo "... DictTrie.i"
 	@echo "... DictTrie.s"

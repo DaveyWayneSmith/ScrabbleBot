@@ -6,6 +6,30 @@
 
 #IncludeRegexTransform: 
 
+/home/pi/ScrabbleBot/ArmController.cpp
+algorithm
+-
+ArmController.h
+/home/pi/ScrabbleBot/ArmController.h
+wiringPi.h
+-
+
+/home/pi/ScrabbleBot/ArmController.h
+string
+-
+definitions.h
+/home/pi/ScrabbleBot/definitions.h
+
+/home/pi/ScrabbleBot/DictTrie.cpp
+fstream
+-
+DictTrie.h
+/home/pi/ScrabbleBot/DictTrie.h
+definitions.h
+/home/pi/ScrabbleBot/definitions.h
+algorithm
+-
+
 /home/pi/ScrabbleBot/DictTrie.h
 iostream
 -
@@ -15,6 +39,10 @@ bits/unique_ptr.h
 -
 TrieNode.h
 /home/pi/ScrabbleBot/TrieNode.h
+
+/home/pi/ScrabbleBot/LetterRip.cpp
+LetterRip.h
+/home/pi/ScrabbleBot/LetterRip.h
 
 /home/pi/ScrabbleBot/LetterRip.h
 string
@@ -26,6 +54,10 @@ board.h
 DictTrie.h
 /home/pi/ScrabbleBot/DictTrie.h
 
+/home/pi/ScrabbleBot/PlayerManager.cpp
+PlayerManager.h
+/home/pi/ScrabbleBot/PlayerManager.h
+
 /home/pi/ScrabbleBot/PlayerManager.h
 iostream
 -
@@ -33,12 +65,22 @@ LetterRip.h
 /home/pi/ScrabbleBot/LetterRip.h
 definitions.h
 /home/pi/ScrabbleBot/definitions.h
+ArmController.h
+/home/pi/ScrabbleBot/ArmController.h
 
 /home/pi/ScrabbleBot/TrieNode.h
 vector
 -
 string
 -
+
+/home/pi/ScrabbleBot/board.cpp
+iostream
+-
+algorithm
+-
+board.h
+/home/pi/ScrabbleBot/board.h
 
 /home/pi/ScrabbleBot/board.h
 stdio.h
@@ -53,6 +95,20 @@ definitions.h
 /home/pi/ScrabbleBot/definitions.h
 
 /home/pi/ScrabbleBot/definitions.h
+
+/home/pi/ScrabbleBot/game.cpp
+iostream
+-
+cstring
+-
+fstream
+-
+unistd.h
+-
+algorithm
+-
+game.h
+/home/pi/ScrabbleBot/game.h
 
 /home/pi/ScrabbleBot/game.h
 vector
@@ -69,10 +125,6 @@ iostream
 -
 game.h
 /home/pi/ScrabbleBot/game.h
-stdio.h
--
-wiringPi.h
--
 
 /home/pi/ScrabbleBot/pile.h
 map

@@ -7,6 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ScrabbleBot.dir/LetterRip.cpp.o"
   "CMakeFiles/ScrabbleBot.dir/DictTrie.cpp.o"
   "CMakeFiles/ScrabbleBot.dir/TrieNode.cpp.o"
+  "CMakeFiles/ScrabbleBot.dir/ArmController.cpp.o"
   "ScrabbleBot.pdb"
   "ScrabbleBot"
 )
