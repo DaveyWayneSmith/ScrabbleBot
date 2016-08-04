@@ -43,9 +43,9 @@ private:
 
     //time constants
     static const int TILE_X_POS_WIDTH = 7600 / BOARD_SIDE_LEN;
-    static const int TILE_X_NEG_WIDTH = 8000 / BOARD_SIDE_LEN;
-    static const int TILE_Y_POS_WIDTH = 3000 / BOARD_SIDE_LEN;
-    static const int TILE_Y_NEG_WIDTH = 2800 / BOARD_SIDE_LEN;
+    static const int TILE_X_NEG_WIDTH = 7850 / BOARD_SIDE_LEN;
+    static const int TILE_Y_POS_WIDTH = 3050 / BOARD_SIDE_LEN;
+    static const int TILE_Y_NEG_WIDTH = 2700 / BOARD_SIDE_LEN;
     static const int VERT_DIST = 500;
     static const int PAUSE_TIME = 100;
 
@@ -70,7 +70,7 @@ private:
     point curr = home; // arm is assumed to be in home position when initialized
 
     point trayAnchor = point{0, 0}; // the point (in ms) from which tray offsets will be calculated
-    point boardAnchor = point{0, 0}; // the point (in ms) from which all board offsets will be calculated
+    point boardAnchor = point{1013, 0}; // the point (in ms) from which all board offsets will be calculated
 };
 
 

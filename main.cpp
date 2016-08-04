@@ -19,9 +19,9 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < 10; i++) {
 		cout << "Run #: " << i << "\n";
 		controller.moveTile(UP);
-		controller.moveArm(point{0, 0}, point{15, 15});
+		controller.moveArm(point{0, 0}, point{17, 15});
 		controller.moveTile(DN);
-		controller.moveArm(point{15, 15}, point{0, 0});
+		controller.moveArm(point{17, 15}, point{0, 0});
 		cout << "Safely exit now..." << flush;
 		delay(3000);
 		cout << "Cannot safely exit now\n";
