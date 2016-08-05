@@ -39,8 +39,8 @@ int main(int argc, char** argv) {
 	//	delay(3000);
 	//	cout << "Cannot safely exit";
 	// }
-        cout << "game test\n";
-        controller.set("IKOECEO", placement{15, 0, "IKO"});
+        //cout << "game test\n";
+        //controller.set("IKOECEO", placement{15, 0, "IKO"});
 	return 0;
     }
     int num_players = 0;

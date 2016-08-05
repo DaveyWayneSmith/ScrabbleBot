@@ -35,7 +35,7 @@ void game::start() {
         if (score >= 0) { // this is a normal move
             players[currPlayer].score += score;
             consecutivePassCount = 0;
-            manager.placeMove(players[currPlayer], p);
+//            manager.placeMove(players[currPlayer], p);
         } else { // this is a special move
             if (score == PASS) {
                 consecutivePassCount++;
