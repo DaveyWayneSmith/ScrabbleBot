@@ -15,19 +15,19 @@ int main(int argc, char** argv) {
 	//controller.moveTile(DN);
 	//controller.moveArm(point{2, 5}, point{0, 0});
 
-	cout << "medium test\n";
-	for (int i = 0; i < 10; i++) {
-		cout << "Run #: " << i << "\n";
-        controller.resetX();
-        controller.resetY();
-		controller.moveTile(UP);
-		controller.moveArm(point{0, 0}, point{17, 15});
-		controller.moveTile(DN);
-		controller.moveArm(point{17, 15}, point{0, 0});
-		cout << "Safely exit now..." << flush;
-		delay(3000);
-		cout << "Cannot safely exit now\n";
-	}
+	// cout << "medium test\n";
+	//for (int i = 0; i < 10; i++) {
+	//	cout << "Run #: " << i << "\n";
+    //    controller.resetX();
+    //    controller.resetY();
+	//	controller.moveTile(UP);
+	//	controller.moveArm(point{0, 0}, point{17, 15});
+	//	controller.moveTile(DN);
+	//	controller.moveArm(point{17, 15}, point{0, 0});
+	//	cout << "Safely exit now..." << flush;
+	//	delay(3000);
+	//	cout << "Cannot safely exit now\n";
+	//}
 	// cout << "hard test\n";
 	// for (int i = 1; i < 14; i++) {
 	//	cout << "Run #: " << i << "\n";
@@ -39,6 +39,8 @@ int main(int argc, char** argv) {
 	//	delay(3000);
 	//	cout << "Cannot safely exit";
 	// }
+        cout << "game test\n";
+        controller.set("IKOECEO", placement{109, 0, "IKOECEO"});
 	return 0;
     }
     int num_players = 0;

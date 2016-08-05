@@ -42,11 +42,14 @@ void ArmController::set(string tray, placement move) {
             idx = (int) tray.find(c);
         }
         moveArm(curr, trayIdx2point(idx)); // go to the tile
+        resetX();
         moveTile(UP);
         moveArm(curr, boardIdx2point(TRANSPOSE(board_loc, move.dir))); // move to the final location
         moveTile(DN);
     }
     moveArm(curr, home);
+    resetX();
+    resetY();
 }
 
 void ArmController::moveTile(bool dir) {
