@@ -32,10 +32,10 @@ public:
     point trayIdx2point(int idx); // convert a tray string index into an [x, y] point
     point boardIdx2point(int idx); // convert a board index to an [x, y] point
     void moveTile(bool dir); // move a tile up or down
-    void moveArm(point start, point stop);
+    void moveArm(point stop);
     void vacSwitch(bool which); // turn the vacuum on or off
-    void resetX(); // assumes arm is at {0, 0} and tries to go a little further in x direction
-    void resetY(); // assumes arm is at {0, 0} and tries to go a little further in y direction
+    void resetX();
+    void resetY();
 private:
     static const bool UP = true;
     static const bool DN = false;
@@ -48,10 +48,10 @@ private:
     static const int TILE_X_NEG_WIDTH = 7900 / BOARD_SIDE_LEN;
     static const int TILE_Y_POS_WIDTH = 3050 / BOARD_SIDE_LEN;
     static const int TILE_Y_NEG_WIDTH = 2700 / BOARD_SIDE_LEN;
+    static const int VERT_DIST = 300;
+    static const int PAUSE_TIME = 100;
     static const int X_RESET_TIME = 200;
     static const int Y_RESET_TIME = 200;
-    static const int VERT_DIST = 500;
-    static const int PAUSE_TIME = 100;
 
     // pin numbers
     static const int XE = 4; // motor x enable pin
@@ -73,8 +73,8 @@ private:
     point home = point{0, 0}; // the home position of the arm from which all offsets will be calculated (should be {0, 0})
     point curr = home; // arm is assumed to be in home position when initialized
 
-    point trayAnchor = point{0, 0}; // the point (in ms) from which tray offsets will be calculated
-    point boardAnchor = point{1013, 0}; // the point (in ms) from which all board offsets will be calculated
+    point trayAnchor = point{0, 0}; // the point (in tiles) from which tray offsets will be calculated
+    point boardAnchor = point{2, 0}; // the point (in tiles) from which all board offsets will be calculated
 };
 
 

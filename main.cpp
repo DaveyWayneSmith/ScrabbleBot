@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 	//	cout << "Cannot safely exit";
 	// }
         cout << "game test\n";
-        controller.set("IKOECEO", placement{109, 0, "IKOECEO"});
+        controller.set("IKOECEO", placement{15, 0, "IKO"});
 	return 0;
     }
     int num_players = 0;

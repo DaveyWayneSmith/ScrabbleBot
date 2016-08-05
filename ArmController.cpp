@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "ArmController.h"
 #include <wiringPi.h>
+#include <iostream>
 
 ArmController::ArmController() {
     wiringPiSetupGpio();
@@ -31,6 +32,7 @@ ArmController::ArmController() {
 
 void ArmController::set(string tray, placement move) {
     int board_loc = TRANSPOSE(move.loc, move.dir);
+	cout << "initial location: " << board_loc << "\n";
     for (auto c : move.word) {
         if (c == '_' || c == ' ') {
             board_loc++;
@@ -41,13 +43,25 @@ void ArmController::set(string tray, placement move) {
             c = '*';
             idx = (int) tray.find(c);
         }
-        moveArm(curr, trayIdx2point(idx)); // go to the tile
-        resetX();
+	point next = trayIdx2point(idx);
+	cout << "tray x: " << next.x << "\n";
+	cout << "tray y: " << next.y << "\n";
+	moveArm(home);
+	resetX();
+	resetY();
+        moveArm(trayIdx2point(idx)); // go to the tile
         moveTile(UP);
-        moveArm(curr, boardIdx2point(TRANSPOSE(board_loc, move.dir))); // move to the final location
+	next = boardIdx2point(TRANSPOSE(board_loc, move.dir));
+	cout << "board x: " << next.x << "\n";
+	cout << "board y: " << next.y << "\n";
+	cout << "board idx: " << (TRANSPOSE(board_loc, move.dir)) << "\n";
+        moveArm(boardIdx2point(TRANSPOSE(board_loc, move.dir))); // move to the final location
+	cout << "curr x: " << curr.x << "\n";
+	cout << "curr y: " << curr.y << "\n";
         moveTile(DN);
+	board_loc++;
     }
-    moveArm(curr, home);
+    moveArm(home);
     resetX();
     resetY();
 }
@@ -78,9 +92,9 @@ void ArmController::moveTile(bool dir) {
     delay(PAUSE_TIME);
 }
 
-void ArmController::moveArm(point start, point stop) {
-    int deltaX = stop.x - start.x;
-    int deltaY = stop.y - start.y;
+void ArmController::moveArm(point stop) {
+    int deltaX = stop.x - curr.x;
+    int deltaY = stop.y - curr.y;
     int x_width;
     int y_width;
     if (deltaX > 0) {
@@ -126,8 +140,8 @@ void ArmController::vacSwitch(bool which) {
 }
 
 point ArmController::boardIdx2point(int idx) {
-    int x = idx % BOARD_SIDE_LEN + boardAnchor.x;
-    int y = idx / BOARD_SIDE_LEN + boardAnchor.y;
+    int x = idx / BOARD_SIDE_LEN + boardAnchor.x;
+    int y = idx % BOARD_SIDE_LEN + boardAnchor.y;
     return point{x, y};
 }
 
@@ -147,9 +161,10 @@ void ArmController::resetX() {
 }
 
 void ArmController::resetY() {
+	cout << "resetting y pos\n";
     digitalWrite(Y0, HIGH);
     digitalWrite(Y1, LOW);
-    digitalWrite(XE, HIGH);
+    digitalWrite(YE, HIGH);
     delay(Y_RESET_TIME);
-    digitalWrite(XE, LOW);
+    digitalWrite(YE, LOW);
 }
