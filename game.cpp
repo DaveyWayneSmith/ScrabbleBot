@@ -30,10 +30,12 @@ void game::start() {
                 maxscore = p.score;
             }
         }
-        int score = play(manager.getMove(players[currPlayer]));
+        placement p = manager.getMove(players[currPlayer]);
+        int score = play(p);
         if (score >= 0) { // this is a normal move
             players[currPlayer].score += score;
             consecutivePassCount = 0;
+            manager.placeMove(players[currPlayer], p);
         } else { // this is a special move
             if (score == PASS) {
                 consecutivePassCount++;

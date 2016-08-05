@@ -26,7 +26,7 @@ typedef struct point {
 class ArmController {
 public:
     ArmController();
-    void set(string tray, placement move);
+    void set(player p, placement move);
 
     // TODO these methods only public for debugging
     point trayIdx2point(int idx); // convert a tray string index into an [x, y] point

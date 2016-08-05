@@ -30,7 +30,12 @@ ArmController::ArmController() {
     digitalWrite(V1, LOW);
 }
 
-void ArmController::set(string tray, placement move) {
+void ArmController::set(player p, placement move) {
+    if (!p.ai) return;
+    string tray = p.tray;
+    cout << "The AI tray is: " << tray << "\nPress any key when AI tray is ready.";
+    char temp;
+    cin >> temp;
     int board_loc = TRANSPOSE(move.loc, move.dir);
 	cout << "initial location: " << board_loc << "\n";
     for (auto c : move.word) {
@@ -43,6 +48,7 @@ void ArmController::set(string tray, placement move) {
             c = '*';
             idx = (int) tray.find(c);
         }
+        tray[idx] = '_';
 	point next = trayIdx2point(idx);
 	cout << "tray x: " << next.x << "\n";
 	cout << "tray y: " << next.y << "\n";

@@ -20,8 +20,8 @@ placement PlayerManager::getMove(player currPlayer) {
     }
 }
 
-void PlayerManager::placeMove(string tray, placement move) {
-    controller.set(tray, move);
+void PlayerManager::placeMove(player currPlayer, placement move) {
+    controller.set(currPlayer, move);
 }
 
 placement PlayerManager::promptMove(string tray) {
